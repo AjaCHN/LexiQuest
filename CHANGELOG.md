@@ -4,11 +4,22 @@
 
 ## [Unreleased]
 
+### 修复（构建与依赖对齐）
+- **构建失败修复**：`.gitignore` 补充忽略 `.codebuddy/`（项目本地记忆目录），避免 EdgeOne 构建沙箱因克隆仓库缺失该目录、Next 16 Turbopack `stat('.codebuddy')` 触发 ENOENT 导致 `next build` 失败。
+
 ### 修复（文档与依赖对齐）
 - **依赖版本对齐**：`package.json` 的 `next` / `react` / `react-dom` 由 `^15.5.0` / `^19.0.0` 修正为与 `package-lock.json` 一致的 `14.2.5` / `18.3.1`（精确定位，避免与锁文件漂移、保证可复现安装）。
 - **锁文件命名对齐**：`package-lock.json` 的 `name` 由旧名 `english-learning-workbench` 改为 `lexiquest`，与 `package.json` 一致。
 - **文档笔误修正**：`docs/WORD_BANK.md` 词库规模由「每档 10 词 + 6 组组词」修正为「每档 10 词 + 2 组组词」（共 30 词 / 6 题）。
 - 全文档集（README / ARCHITECTURE / DATA_MODEL / DEPLOYMENT / WORD_BANK / CONTRIBUTING / overview / ai/memory-bank）技术栈口径统一为 Next.js 14.2.5 + React 18.3.1。
+
+## [2.0.2] - 2026-08-28
+
+### 新增（集成 Google Analytics 4）
+- 在 `app/layout.tsx` 通过 `next/script` 的 `Script` 组件注入 GA4（衡量 ID `G-W806DBME5G`），采用 `afterInteractive` 策略，不阻塞首屏渲染。
+- 使用官方推荐的双段方案：先内联 `gtag` 配置（`#ga-init`），再异步加载 `gtag.js`（`#ga-loader`），数据层自动缓冲重放。
+- 不引入 `@next/third-parties` 等额外依赖，保持项目零 npm 依赖原则；脚本带语义化 `id` 便于调试与屏蔽。
+- `overview.md` 功能段补充 GA4 说明，保持文档与代码一致。
 
 ## [2.0.1] - 2026-08-28
 

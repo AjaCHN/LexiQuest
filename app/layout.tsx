@@ -1,4 +1,5 @@
 import "./globals.css";
+import Script from "next/script";
 import type { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
@@ -21,7 +22,29 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh-CN">
-      <body>{children}</body>
+      <body>
+        {/* Google Analytics 4（衡量 ID: G-W806DBME5G）。
+            采用 next/script 的 afterInteractive 策略，避免阻塞首屏渲染；
+            内联 config 先定义 gtag 函数与 dataLayer，再由 loader 加载库后重放。 */}
+        <Script
+          id="ga-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-W806DBME5G');
+            `,
+          }}
+        />
+        <Script
+          id="ga-loader"
+          src="https://www.googletagmanager.com/gtag/js?id=G-W806DBME5G"
+          strategy="afterInteractive"
+        />
+        {children}
+      </body>
     </html>
   );
 }

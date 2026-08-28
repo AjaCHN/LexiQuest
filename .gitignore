@@ -24,6 +24,7 @@ wb_*.json
 
 # Project tooling / memory (not meant to be published)
 .workbuddy/
+.codebuddy/
 
 # OS & editor
 .DS_Store
