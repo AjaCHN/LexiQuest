@@ -1,4 +1,5 @@
 "use client";
+import type { ReactElement } from "react";
 import { AgeGroup, GROUP_META } from "../lib/types";
 import { IconBook, IconPuzzle, IconStar } from "./Icons";
 
@@ -9,7 +10,7 @@ export default function GroupSelector({
 }: {
   onSelect: (g: AgeGroup) => void;
 }) {
-  const icons: Record<AgeGroup, JSX.Element> = {
+  const icons: Record<AgeGroup, ReactElement> = {
     children: <IconBook size={24} />,
     teen: <IconStar size={24} />,
     adult: <IconPuzzle size={24} />,

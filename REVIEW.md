@@ -80,7 +80,7 @@
 
 ## 四、🟢 低危 / 规范与可维护性
 
-- **[L1] Next.js 14.2.5 偏旧**：Makers 专家团建议用 Next.js 16.x（EdgeOne Next.js 适配器跟随新版本演进、安全补丁更全）。14 可运行，但升级可获得更好 EdgeOne 适配。**建议后续升级，需回归测试**。
+- **[L1] Next.js 升级已完成**：v1.0.1 复核时为 14.2.5，已于 v2.0.0 升级至 **Next.js 16.3.3 + React 19.2.0**，构建通过（`tsc` + `next build`）。Edge Runtime 在 Next 16 中已标记**弃用**（构建告警），`app/api/sync` 的 `globalThis.my_kv` 当前仍可运行，但后续需评估迁移到 nodejs runtime 或 EdgeOne 替代 KV 方案。
 - **[L2] 注释覆盖率 1.17%**：`ensureToday`（顺延）、`toggleWord`（积分/streak）等关键算法注释偏少。建议在函数上方补 1–2 行意图说明（当前已有部分中文注释，尚可）。
 - **[L3] 静态脚本 10 条「优化建议」均为误报，无需修改**：
   - 7 个组件文件被报「命名不规范（建议 kebab/camel）」→ React/Next 官方约定组件文件用 **PascalCase**，正确。

@@ -2,7 +2,7 @@
 
 > 仓库 `lexiquest`｜命名：中文「英语闯关台」/ 英文 **LexiQuest** / slug `lexiquest`
 
-基于 **Next.js 14（App Router + TypeScript）** 构建，目标部署到 **腾讯云 EdgeOne Pages**，数据通过 **Edge KV** 实现多设备云端同步。
+基于 **Next.js 16（App Router + TypeScript）** 构建，部署到 **腾讯云 EdgeOne Pages**，数据通过 **Edge KV** 实现多设备云端同步。
 
 ## 已实现功能
 - **三档年龄段**：儿童启蒙 / 青少年学生 / 成人进阶，各自独立词库与难度（各 10 词，含 前缀/词根/后缀/基础词 拆分 + 含义提示；每档 2 组组词练习）。

@@ -10,6 +10,25 @@
 - **文档笔误修正**：`docs/WORD_BANK.md` 词库规模由「每档 10 词 + 6 组组词」修正为「每档 10 词 + 2 组组词」（共 30 词 / 6 题）。
 - 全文档集（README / ARCHITECTURE / DATA_MODEL / DEPLOYMENT / WORD_BANK / CONTRIBUTING / overview / ai/memory-bank）技术栈口径统一为 Next.js 14.2.5 + React 18.3.1。
 
+## [2.0.1] - 2026-08-28
+
+### 重构（KV 访问抽象化，应对 Edge Runtime 弃用）
+- 新增 `lib/kv.ts`：集中封装 Edge Runtime 的 KV 绑定读取（`getKvBinding`）、可选同步密钥读取（`getSyncSecret`）与 `KV` 类型。
+- `app/api/sync/route.ts` 移除内联的 `globalThis.my_kv` / `SYNC_SECRET` 裸访问与重复类型定义，改为从 `lib/kv` 导入，降低同步逻辑的运行时耦合。
+- 在 `runtime = "edge"` 处补充注释：说明 Next 16 已弃用 Edge Runtime，但 EdgeOne Makers 当前仅在 edge runtime 注入 KV 绑定，故保留 edge；未来平台在 nodejs 提供 KV 时仅需改 `lib/kv.ts` 实现，调用方无需改动（单一迁移点）。
+- 验证：`tsc --noEmit` 通过；业务逻辑（合并、校验、降级）未变更。
+
+## [2.0.0] - 2026-08-28
+
+### 升级（破坏性框架升级）
+- **Next.js 14.2.5 → 16.3.3** + **React 18.3.1 → 19.2.0** + **react-dom 19.2.0**（`@types/react` / `@types/react-dom` 同步至 19.2.0）。
+- **破坏性变更适配**：
+  - `components/GroupSelector.tsx`：全局 `JSX.Element` 命名空间在 React 19 类型中已移除，改为导入 `ReactElement`。
+  - `tsconfig.json`：Next 16 构建时自动将 `jsx` 设为 `react-jsx`、新增 `.next/dev/types` include（保留框架维护项）。
+- **构建验证通过**：`tsc --noEmit` + `next build`（Turbopack）均成功。`/api/sync` 仍识别为动态路由。
+- **已知债务（非阻塞）**：Next 16 已将 **Edge Runtime 标记为弃用**（构建告警），`app/api/sync` 的 `runtime='edge'` + `globalThis.my_kv` 当前仍可运行，后续需评估迁移到 nodejs runtime 或 EdgeOne 替代 KV 方案。
+- **同步更新技术栈口径**：README / overview / ARCHITECTURE / REVIEW 由 Next.js 14 更新为 16。
+
 ## [1.0.1] - 2026-08-28
 
 ### 完善（UI 可访问性与测试定位）

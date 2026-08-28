@@ -1,17 +1,12 @@
 import { NextRequest } from "next/server";
+import { getKvBinding, getSyncSecret, type KV } from "../../../lib/kv";
 
-// EdgeOne Pages 上 KV 以绑定的变量名作为全局对象暴露。
-// 在控制台「Bind Namespace」时，变量名请填写为 my_kv（与下方一致）。
+// 注意：Next.js 16 已将 Edge Runtime 标记为弃用（构建期告警），
+// 但腾讯云 EdgeOne Pages 当前仅在 edge runtime 注入 KV 绑定（my_kv），
+// 故此处必须保留 edge runtime 才能访问云端同步 KV。
+// 待 EdgeOne 在 nodejs runtime 提供等价 KV 后，可移除本声明并通过
+// lib/kv.ts 的 getKvBinding 切换实现，无需改动下方业务逻辑。
 export const runtime = "edge";
-
-type KV = {
-  get(key: string): Promise<string | null>;
-  put(key: string, value: string): Promise<void>;
-};
-
-function getKV(): KV | null {
-  return (globalThis as unknown as { my_kv?: KV }).my_kv ?? null;
-}
 
 // 同步码格式约束：4~64 位字母/数字/下划线/连字符，避免脏键与意外碰撞。
 const CODE_RE = /^[A-Za-z0-9_-]{4,64}$/;
@@ -23,9 +18,7 @@ function validCode(code: string | null): code is string {
 // KV 键名改为 code 的 SHA-256 形式，使未持有密钥者无法枚举或读取数据。
 // 未配置时退化为明文 code（仍可用，仅失去“防枚举”加固）。
 async function resolveKey(code: string): Promise<string> {
-  const secret =
-    (process.env && process.env.SYNC_SECRET) ||
-    (globalThis as unknown as { SYNC_SECRET?: string }).SYNC_SECRET;
+  const secret = getSyncSecret();
   if (!secret) return `sync:${code}`;
   const data = new TextEncoder().encode(`${secret}:${code}`);
   const buf = await crypto.subtle.digest("SHA-256", data);
@@ -84,7 +77,7 @@ function mergeProgress(local: Progress | null, remote: Progress | null): Progres
 
 export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
-  const kv = getKV();
+  const kv = getKvBinding();
   if (!kv) return Response.json({ mode: "local", data: null });
   // S3：无有效同步码时返回 local（语义清晰，不误导客户端走云端）
   if (!validCode(code)) return Response.json({ mode: "local", data: null });
@@ -98,7 +91,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
-  const kv = getKV();
+  const kv = getKvBinding();
   if (!kv) return Response.json({ ok: false, mode: "local" });
   if (!validCode(code))
     return Response.json({ ok: false, mode: "local", error: "invalid_code" });

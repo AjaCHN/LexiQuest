@@ -6,9 +6,9 @@
 
 | 维度 | 选型 | 说明 |
 |------|------|------|
-| 框架 | Next.js 14.2.5（App Router） | 单页应用，主路由 `/`，客户端渲染为主 |
+| 框架 | Next.js 16.3.3（App Router，Turbopack） | 单页应用，主路由 `/`，客户端渲染为主 |
 | 语言 | TypeScript 5.5.4 | 全量类型约束 |
-| 运行时 | Node 20（构建）/ Edge Runtime（同步接口） | `app/api/sync` 走 Edge Runtime |
+| 运行时 | Node 20（构建）/ Edge Runtime（同步接口，Next 16 已标记弃用） | `app/api/sync` 走 Edge Runtime |
 | 样式 | 纯 CSS（`app/globals.css`，812 行） | 零外部依赖、零 UI 框架，内联 SVG 图标 |
 | 存储 | 浏览器 `localStorage`（离线优先） | 无后端时全部数据存本地 |
 | 云端同步 | 腾讯云 EdgeOne Pages + Edge KV | 变量名 `my_kv`，无需登录 |
