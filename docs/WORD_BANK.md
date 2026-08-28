@@ -13,7 +13,7 @@ export function wordsByGroup(g: AgeGroup): WordEntry[];        // 按人群过�
 export function formationByGroup(g: AgeGroup): FormationChallenge[];
 ```
 
-当前规模：每档 **10 个单词 + 6 组组词练习**（共 30 词 / 6 题，children/teen/adult 各 2 题）。
+当前规模：每档 **10 个单词 + 2 组组词练习**（共 30 词 / 6 题，children/teen/adult 各 2 题）。
 
 ## 2. 新增一个单词（`WordEntry`）
 

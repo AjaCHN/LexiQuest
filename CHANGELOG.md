@@ -2,6 +2,14 @@
 
 遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/) 约定，版本号语义采用近似 `MAJOR.MINOR.PATCH`。
 
+## [Unreleased]
+
+### 修复（文档与依赖对齐）
+- **依赖版本对齐**：`package.json` 的 `next` / `react` / `react-dom` 由 `^15.5.0` / `^19.0.0` 修正为与 `package-lock.json` 一致的 `14.2.5` / `18.3.1`（精确定位，避免与锁文件漂移、保证可复现安装）。
+- **锁文件命名对齐**：`package-lock.json` 的 `name` 由旧名 `english-learning-workbench` 改为 `lexiquest`，与 `package.json` 一致。
+- **文档笔误修正**：`docs/WORD_BANK.md` 词库规模由「每档 10 词 + 6 组组词」修正为「每档 10 词 + 2 组组词」（共 30 词 / 6 题）。
+- 全文档集（README / ARCHITECTURE / DATA_MODEL / DEPLOYMENT / WORD_BANK / CONTRIBUTING / overview / ai/memory-bank）技术栈口径统一为 Next.js 14.2.5 + React 18.3.1。
+
 ## [1.0.0] - 2026-08-28
 
 ### 新增（初版交付）
