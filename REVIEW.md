@@ -3,6 +3,7 @@
 > 审查对象：`E:/Github/English`（Next.js 14 + 腾讯云 EdgeOne Pages 多年龄段英语学习工作台）
 > 审查日期：2026-08-28
 > 审查方式：全量源码通读 + `code-reviewer` 静态分析脚本 + Makers/EdgeOne 部署规范核对
+> 修复状态更新：2026-08-28（v1.0.1）—— 原 S1–S3、M1–M4 经复核**均已在代码中修复**，详见 §七。
 
 ## 一、总体结论
 
@@ -108,3 +109,35 @@
 4. **部署后必测**：EdgeOne 控制台绑定 KV（`my_kv`）后，`/api/sync` 实际读写是否生效（当前本地降级为 `local` 模式已验证，云端 `cloud` 模式需上线实测）。
 
 > 是否需要我直接动手修复 S1–S3、M2 这几项？可一次性改完并重新构建验证。
+
+---
+
+## 七、修复状态（v1.0.1，2026-08-28 复核）
+
+经全量源码复核，原报告所列问题**实际均已在代码中实现**，非待修复项：
+
+| 编号 | 状态 | 代码佐证 |
+|------|------|----------|
+| [S1] `allowedDevOrigins` | ✅ 已修复 | `next.config.mjs` 第 4 行 `allowedDevOrigins: ["127.0.0.1"]` |
+| [S2] 同步接口校验 + 合并 | ✅ 已修复 | `route.ts` `validateCode()` + `mergeProgress()` 集合合并，非 last-write-wins 覆盖 |
+| [S3] GET 无 code 返回 `local` | ✅ 已修复 | `route.ts` 第 22 行 `mode: "local"` |
+| [M1] 取消完成词回退 streak | ✅ 已修复 | `storage.ts` `toggleWord` 调 `recalcStreak()` 重算连续天数 |
+| [M2] 导入校验 group | ✅ 已修复 | `storage.ts` `importJSON` `validateProgress()` 校验 `group ∈ AgeGroup` |
+| [M3] 清空复用 storage 函数 | ✅ 已修复 | `page.tsx` `handleClear` 调 `clearLocalGroup(group)` |
+| [M4] 逾期词上限 | ✅ 已修复 | `storage.ts` `ensureToday` `slice(maxOld)` 限制每日逾期词数量 |
+
+### 本轮新增完善（v1.0.1）
+- **[S4] 主要 UI 容器补充语义化 `id`**（此前缺失，不利于测试/无障碍定位）：
+  - `app/page.tsx`：`#lexiquest-app`、`#app-header`、`#main-tabs`
+  - `components/WordCard.tsx`：`#word-card-{id}`
+  - `components/TodayPanel.tsx`：`#today-panel`
+  - `components/SettingsDrawer.tsx`：`#settings-drawer-overlay`、`#settings-drawer`
+  - `components/FormationPractice.tsx`：`#formation-quiz-{id}`
+  - `components/ChallengePanel.tsx`：`#challenge-stat-row`、`#challenge-progress-card`
+  - `components/GroupSelector.tsx`：`#group-selector-grid`
+- `tsc --noEmit` 通过，无新增类型错误。
+
+### 剩余真实建议（非 blocker）
+- [L1] 升级 Next.js 14.2.5 → 16.x（需回归测试 EdgeOne 适配）
+- [L2] 关键算法注释可再补充（当前已有中文注释）
+- [S2 加固] 上线公开站点前仍建议对同步码加盐签名，避免枚举碰撞

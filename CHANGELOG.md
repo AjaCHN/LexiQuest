@@ -10,6 +10,12 @@
 - **文档笔误修正**：`docs/WORD_BANK.md` 词库规模由「每档 10 词 + 6 组组词」修正为「每档 10 词 + 2 组组词」（共 30 词 / 6 题）。
 - 全文档集（README / ARCHITECTURE / DATA_MODEL / DEPLOYMENT / WORD_BANK / CONTRIBUTING / overview / ai/memory-bank）技术栈口径统一为 Next.js 14.2.5 + React 18.3.1。
 
+## [1.0.1] - 2026-08-28
+
+### 完善（UI 可访问性与测试定位）
+- **补充语义化 `id`**：为所有主要 UI 容器添加语义化 `id`（`#lexiquest-app`、`#app-header`、`#main-tabs`、`#word-card-{id}`、`#today-panel`、`#settings-drawer[-overlay]`、`#formation-quiz-{id}`、`#challenge-stat-row`、`#challenge-progress-card`、`#group-selector-grid`），便于调试、e2e 选择器与无障碍锚点。
+- **REVIEW.md 修复状态对齐**：复核确认原报告 [S1]–[S3]、[M1]–[M4] 均已在代码中实现（附代码佐证），新增 §七 修复状态表与 [S4] 语义化 id 完善记录。
+
 ## [1.0.0] - 2026-08-28
 
 ### 新增（初版交付）

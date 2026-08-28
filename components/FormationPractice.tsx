@@ -47,7 +47,7 @@ export default function FormationPractice({
           chosen.length === c.answers.length &&
           c.answers.every((a) => chosen.includes(a));
         return (
-          <div className="quiz" key={c.id}>
+          <div id={"formation-quiz-" + c.id} className="quiz" key={c.id}>
             <div className="q">{c.question}</div>
             <div className="root">
               词根/基础：<b>{c.root}</b> —— {c.rootHint}

@@ -45,8 +45,8 @@ export default function SettingsDrawer({
   };
 
   return (
-    <div className="overlay" onClick={onClose}>
-      <div className="drawer" onClick={(e) => e.stopPropagation()}>
+    <div id="settings-drawer-overlay" className="overlay" onClick={onClose}>
+    <div id="settings-drawer" className="drawer" onClick={(e) => e.stopPropagation()}>
         <div style={{ display: "flex", alignItems: "center" }}>
           <h2>设置</h2>
           <button className="iconbtn" style={{ marginLeft: "auto" }} onClick={onClose}>

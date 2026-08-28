@@ -22,7 +22,7 @@ export default function GroupSelector({
           不同年龄段匹配不同词库与难度，选一个开始今天的闯关吧
         </p>
       </div>
-      <div className="group-grid">
+      <div id="group-selector-grid" className="group-grid">
         {ORDER.map((g) => {
           const m = GROUP_META[g];
           return (

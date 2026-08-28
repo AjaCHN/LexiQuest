@@ -11,7 +11,7 @@ export default function ChallengePanel({ progress }: { progress: UserProgress })
   })();
   return (
     <>
-      <div className="stat-row">
+      <div id="challenge-stat-row" className="stat-row">
         <div className="stat">
           <div className="n">{progress.points}</div>
           <div className="l">
@@ -32,7 +32,7 @@ export default function ChallengePanel({ progress }: { progress: UserProgress })
         </div>
       </div>
 
-      <div className="card">
+      <div id="challenge-progress-card" className="card">
         <h2>
           闯关进度 · {ni.current.title}
           {ni.next ? ` → ${ni.next.title}` : "（已满级）"}

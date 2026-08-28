@@ -14,7 +14,7 @@ export default function WordCard({ word }: { word: WordEntry }) {
     }
   };
   return (
-    <div className={"flip" + (open ? " open" : "")}>
+    <div id={"word-card-" + word.id} className={"flip" + (open ? " open" : "")}>
       <div className="flip-inner">
         <div className="face">
           <div className="word">{word.word}</div>

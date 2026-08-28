@@ -243,8 +243,8 @@ export default function Page() {
     .filter(Boolean) as WordEntry[];
 
   return (
-    <div className="app">
-      <div className="hd">
+    <div id="lexiquest-app" className="app">
+      <div id="app-header" className="hd">
         <div className="logo">
           <IconLogo />
         </div>
@@ -277,7 +277,7 @@ export default function Page() {
 
       <TodayPanel plan={plan!} wordMap={wordMap} onToggle={handleToggleWord} />
 
-      <div className="tabs">
+      <div id="main-tabs" className="tabs">
         <button
           className={activeTab === "words" ? "active" : ""}
           onClick={() => setActiveTab("words")}

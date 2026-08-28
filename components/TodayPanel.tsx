@@ -15,7 +15,7 @@ export default function TodayPanel({
   const total = plan.wordIds.length;
   const done = plan.doneWordIds.length;
   return (
-    <div className="today">
+    <div id="today-panel" className="today">
       <div className="section-title" style={{ margin: "0 0 8px" }}>
         📌 今天要处理
         <span className="chip" style={{ marginLeft: "auto" }}>
