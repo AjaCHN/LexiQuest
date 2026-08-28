@@ -2,6 +2,10 @@
 
 <p align="center">
   <b>LexiQuest</b> · 仓库 <code>lexiquest</code> · Next.js 14 + 腾讯云 EdgeOne Pages · Edge KV 跨设备同步
+  <br/>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"/></a>
+  <a href="./.github/CONTRIBUTING.md"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg" alt="Contributions Welcome"/></a>
+  <a href="./.github/CODE_OF_CONDUCT.md"><img src="https://img.shields.io/badge/code%20of%20conduct-Contributor%20Covenant-ff69b4.svg" alt="Code of Conduct"/></a>
 </p>
 
 为不同年龄段人群定制的网页版英语学习工作台，基于 **Next.js 14（App Router）** 构建，部署到 **腾讯云 EdgeOne Pages**，数据通过 **Edge KV** 实现多设备云端同步（无登录）。
@@ -30,6 +34,10 @@
 | [REVIEW.md](./REVIEW.md) | 代码审查报告与已知问题清单（综合健康度 B+） |
 | [CHANGELOG.md](./CHANGELOG.md) | 版本变更记录 |
 | [CONTRIBUTING.md](./CONTRIBUTING.md) | 本地运行、目录约定、提 PR 规范 |
+| [.github/CODE_OF_CONDUCT.md](./.github/CODE_OF_CONDUCT.md) | 社区行为准则（Contributor Covenant） |
+| [.github/SECURITY.md](./.github/SECURITY.md) | 安全漏洞报告与已知安全注意事项 |
+| [.github/SUPPORT.md](./.github/SUPPORT.md) | 获取支持与问题反馈渠道 |
+| [LICENSE](./LICENSE) | MIT 开源许可证 |
 
 ## 本地开发
 

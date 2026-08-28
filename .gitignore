@@ -1,6 +1,10 @@
 # Dependencies
 node_modules/
 
+# Lockfiles: 云端 EdgeOne 用 npm 构建，本地用 pnpm（共享 E:\Users\Admin\.pnpm-store）
+# 仅保留 npm 的 package-lock.json；禁止提交 pnpm-lock.yaml，避免与云端 npm 冲突
+pnpm-lock.yaml
+
 # Next.js / build output
 .next/
 out/

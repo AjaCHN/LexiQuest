@@ -1,0 +1,57 @@
+name: Bug 报告
+description: 报告 LexiQuest 的功能缺陷或异常
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢反馈！请尽量填写完整，便于快速定位。
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 问题描述
+      description: 发生了什么？期望行为是什么？
+      placeholder: 清晰、简练地描述现象与预期。
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现步骤
+      description: 如何稳定复现该问题？
+      placeholder: |
+        1. 打开 ……
+        2. 点击 ……
+        3. 看到 ……
+    validations:
+      required: true
+  - type: dropdown
+    id: age-group
+    attributes:
+      label: 涉及人群档位
+      options:
+        - 儿童启蒙（6-12）
+        - 青少年学生（13-22）
+        - 成人进阶（22+）
+        - 不特定 / 全局
+    validations:
+      required: false
+  - type: dropdown
+    id: environment
+    attributes:
+      label: 运行环境
+      options:
+        - 本地 npm run dev
+        - EdgeOne Pages 部署
+        - 本地模式（无 KV）
+        - 云端同步模式（有 KV）
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志 / 截图
+      description: 粘贴相关控制台报错或截图（可拖拽上传）。
+    validations:
+      required: false
