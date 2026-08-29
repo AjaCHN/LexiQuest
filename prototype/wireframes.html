@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>英语闯关台 LexiQuest · 组件库规范 v2.0.5</title>
+<link rel="stylesheet" href="tokens.css" />
+<style>
+body{line-height:1.6}
+.wrap{max-width:1080px;margin:0 auto;padding:32px 20px 80px}
+header.top{border-bottom:2px solid var(--border);padding-bottom:18px;margin-bottom:8px}
+header.top h1{margin:0;font-size:26px;display:flex;align-items:center;gap:10px}
+header.top .badge{font-size:12px;font-weight:700;color:var(--primary);background:var(--primary-soft);padding:4px 10px;border-radius:999px}
+header.top p{color:var(--text-soft);margin:8px 0 0;font-size:14px}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 8px}
+.toc a{font-size:13px;color:var(--text-soft);text-decoration:none;background:var(--bg-soft);border:1px solid var(--border);padding:6px 12px;border-radius:999px}
+.toc a:hover{color:var(--primary);border-color:var(--primary)}
+h2.sec{margin:42px 0 6px;font-size:20px;padding-top:14px;border-top:1px solid var(--border)}
+h2.sec .n{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:9px;background:var(--primary);color:#fff;font-size:14px;margin-right:10px}
+.lead{color:var(--text-soft);font-size:14px;margin:0 0 18px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:760px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.panel{background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+.panel>h3{margin:0 0 2px;font-size:15px} .panel>.desc{color:var(--text-faint);font-size:12px;margin:0 0 14px}
+.stage{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.code{margin-top:14px;background:#0f1320;color:#e8ebf5;border-radius:12px;padding:14px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;overflow:auto}
+.code .c{color:#7c9cff}.code .t{color:#9be8b0}.code .a{color:#f3b968}
+.rule{background:var(--warn-soft);border-left:4px solid var(--warn);border-radius:0 10px 10px 0;padding:10px 14px;margin-top:14px;font-size:13px;color:#7a4a06}
+.rule b{color:var(--warn)}
+
+/* 组件视觉 */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border-radius:12px;border:1px solid var(--border);background:var(--bg-sunken);color:var(--text);font-size:14px;font-weight:600;min-height:44px}
+.btn.primary{background:var(--primary);color:var(--primary-text);border-color:transparent}
+.btn.ghost{background:transparent}
+.btn.danger{background:var(--danger-soft);color:var(--danger);border-color:transparent}
+.btn.sm{padding:7px 12px;min-height:38px;font-size:13px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.input{width:100%;padding:11px 12px;border-radius:11px;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);font-size:16px}
+.input:focus{outline:2px solid var(--primary);outline-offset:1px}
+.input.err{border-color:var(--danger)}
+.label{font-size:13px;font-weight:600;color:var(--text-soft);margin-bottom:6px;display:block}
+.help{font-size:12px;color:var(--text-faint);margin-top:6px}
+.fld{margin-bottom:14px;min-width:240px;flex:1}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:6px 10px;border-radius:999px;font-size:13px;font-weight:600;background:var(--bg-sunken);color:var(--text-soft);border:1px solid var(--border)}
+.chip.primary{background:var(--primary-soft);color:var(--primary);border-color:transparent}
+.chip.accent{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.switch{position:relative;width:46px;height:26px;display:inline-block}
+.switch input{display:none}.switch .tk{position:absolute;inset:0;border-radius:999px;background:var(--bg-sunken);border:1px solid var(--border)}
+.switch .kb{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:var(--shadow);transition:.2s}
+.switch input:checked+.tk{background:var(--primary)}.switch input:checked+.tk+.kb{transform:translateX(20px)}
+.select{appearance:none;padding:11px 36px 11px 12px;border-radius:11px;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);font-size:15px;min-height:44px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235b6478' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.tabs{display:inline-flex;gap:6px;background:var(--bg-soft);border:1px solid var(--border);border-radius:14px;padding:6px;box-shadow:var(--shadow)}
+.tabs button{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 14px;border-radius:10px;border:none;background:transparent;color:var(--text-soft);font-size:14px;font-weight:600;min-height:44px}
+.tabs button.active{background:var(--primary);color:var(--primary-text)}
+.card{border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-soft);box-shadow:var(--shadow);padding:16px}
+.wordcard{border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-soft);box-shadow:var(--shadow);padding:16px;display:flex;flex-direction:column;gap:6px;min-width:240px}
+.wordcard .w{font-size:20px;font-weight:700}.wordcard .p{color:var(--text-faint);font-size:13px}
+.wordcard .pos{font-size:11px;color:var(--primary);background:var(--primary-soft);padding:2px 8px;border-radius:6px;align-self:flex-start}
+.partrow{display:flex;gap:6px;flex-wrap:wrap}.part{border-radius:9px;padding:5px 9px;font-size:13px;color:#fff;font-weight:600}
+.part.pre{background:var(--prefix)}.part.root{background:var(--root)}.part.suf{background:var(--suffix)}.part.base{background:var(--base)}
+.opt{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:12px;border:1px solid var(--border);background:var(--bg-sunken);min-height:44px;font-size:15px;min-width:220px;flex:1}
+.opt .bx{width:20px;height:20px;border-radius:6px;border:2px solid var(--border);display:grid;place-items:center;color:#fff}
+.opt.sel{border-color:var(--primary);background:var(--primary-soft)}
+.opt.right{border-color:var(--success);background:var(--success-soft);color:var(--success)}
+.opt.wrong{border-color:var(--danger);background:var(--danger-soft);color:var(--danger)}
+.opt.right .bx,.opt.wrong .bx{background:currentColor;border-color:currentColor}
+.avatar{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--primary),#8b5cf6);color:#fff;display:grid;place-items:center;font-weight:800}
+.navitem{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;color:var(--text-faint);font-size:11px;font-weight:600}
+.navitem.active{color:var(--primary)}
+.toast{position:fixed;left:50%;bottom:40px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:13px;font-weight:600;box-shadow:var(--shadow)}
+.modal{position:relative;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);box-shadow:var(--shadow-lg);padding:20px;max-width:380px}
+.modal .ov{position:absolute;inset:-100vh;background:rgba(0,0,0,.45);border-radius:20px}
+.drawer{position:relative;border:1px solid var(--border);border-radius:var(--radius) 0 0 var(--radius);background:var(--bg);box-shadow:var(--shadow-lg);padding:20px;width:340px;min-height:300px}
+.fab{width:56px;height:56px;border-radius:18px;background:var(--primary);color:#fff;display:grid;place-items:center;box-shadow:var(--shadow-lg);border:none}
+.empty{text-align:center;color:var(--text-faint);padding:30px;border:1px dashed var(--border);border-radius:12px}
+table.tbl{width:100%;border-collapse:collapse;font-size:13px}
+table.tbl th,table.tbl td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--border)}
+table.tbl th{color:var(--text-soft);font-weight:600;font-size:12px}
+.progress{height:12px;border-radius:999px;background:var(--bg-sunken);overflow:hidden}
+.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),#8b5cf6)}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;background:var(--bg-sunken);color:var(--text-soft);margin-right:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <h1>组件库规范 <span class="badge">LexiQuest · v2.0.5</span></h1>
+  <p>统一基础组件、复合组件、业务组件的视觉与交互约定，供原型与实现对齐。所有组件遵循：44px 触控目标、语义化 id、可访问性（ARIA）、明暗双主题。</p>
+  <p class="lead">业务组件命名与 <code>app/components/*</code> 对齐；完整映射见 <a href="index.html">原型门户</a> 的「原型区块 → 组件映射表」。</p>
+</header>
+<nav class="toc">
+  <a href="#base">1 基础组件</a>
+  <a href="#composite">2 复合组件</a>
+  <a href="#business">3 业务组件</a>
+  <a href="#rules">4 使用规则</a>
+</nav>
+
+<!-- ============ 1 基础组件 ============ -->
+<h2 class="sec" id="base"><span class="n">1</span>基础组件</h2>
+<p class="lead">原子级 UI 元素，不接受业务数据，仅承载交互或展示。</p>
+
+<div class="grid g4">
+  <div class="panel"><h3>按钮 Button</h3><p class="desc">最小高度 44px，可加图标</p>
+    <div class="stage"><button class="btn primary">主操作</button><button class="btn">次操作</button><button class="btn ghost">幽灵</button><button class="btn danger">危险</button><button class="btn sm">小号</button><button class="btn" disabled>禁用</button></div>
+    <div class="code"><span class="c">&lt;button</span> <span class="a">class</span>=<span class="t">"btn primary"</span> <span class="a">id</span>=<span class="t">"saveBtn"</span><span class="c">&gt;</span>主操作<span class="c">&lt;/button&gt;</span></div>
+  </div>
+
+  <div class="panel"><h3>输入框 Input</h3><p class="desc">含 label 与帮助文本</p>
+    <div class="fld"><label class="label" for="demoIn">同步码</label><input id="demoIn" class="input" placeholder="例如 LEXI-2026"><div class="help">多设备填写相同同步码共享进度</div></div>
+    <div class="code"><span class="c">&lt;input</span> <span class="a">id</span>=<span class="t">"syncCode"</span> <span class="a">class</span>=<span class="t">"input"</span> <span class="a">aria-describedby</span>=<span class="t">"syncHelp"</span><span class="c">/&gt;</span></div>
+  </div>
+
+  <div class="panel"><h3>选择框 Select</h3><p class="desc">原生外观统一</p>
+    <div class="fld" style="min-width:200px"><label class="label">年龄段</label><select class="select"><option>儿童启蒙</option><option>青少年学生</option><option>成人进阶</option></select></div>
+  </div>
+
+  <div class="panel"><h3>开关 Switch</h3><p class="desc">用于设置项布尔切换</p>
+    <div class="stage"><label class="switch"><input type="checkbox" checked><span class="tk"></span><span class="kb"></span></label><label class="switch"><input type="checkbox"><span class="tk"></span><span class="kb"></span></label></div>
+  </div>
+
+  <div class="panel"><h3>芯片 Chip</h3><p class="desc">状态/标签/积分</p>
+    <div class="stage"><span class="chip primary">★ 180</span><span class="chip accent">🔥 7</span><span class="chip">青少年</span></div>
+  </div>
+
+  <div class="panel"><h3>图标按钮 IconButton</h3><p class="desc">40px，纯图标操作</p>
+    <div class="stage"><button class="btn" style="width:40px;height:40px;padding:0">☀</button><button class="btn" style="width:40px;height:40px;padding:0">⚙</button><button class="btn" style="width:40px;height:40px;padding:0">🔊</button></div>
+  </div>
+
+  <div class="panel"><h3>进度条 Progress</h3><p class="desc">晋级/完成度</p>
+    <div class="stage" style="flex-direction:column;align-items:stretch"><div class="progress"><i style="width:60%"></i></div><div class="progress"><i style="width:30%"></i></div></div>
+  </div>
+
+  <div class="panel"><h3>标签 Tag</h3><p class="desc">分组 / 词性 / 分类</p>
+    <div class="stage"><span class="tag">情绪</span><span class="tag">考试</span><span class="tag">职场</span></div>
+  </div>
+</div>
+
+<!-- ============ 2 复合组件 ============ -->
+<h2 class="sec" id="composite"><span class="n">2</span>复合组件</h2>
+<p class="lead">由多个基础组件组合，具备固定内部结构但仍是通用容器。</p>
+
+<div class="grid g2">
+  <div class="panel"><h3>表单 Form</h3><p class="desc">标签 + 输入 + 帮助 + 操作</p>
+    <div class="fld"><label class="label">同步码</label><input class="input" value="LEXI-2026"></div>
+    <div class="fld"><label class="label">云端同步</label><div class="stage"><label class="switch"><input type="checkbox" checked><span class="tk"></span><span class="kb"></span></label><span class="chip primary">已同步</span></div></div>
+    <div class="stage"><button class="btn primary sm">保存</button><button class="btn sm">取消</button></div>
+    <div class="rule"><b>规则</b>：表单操作区右对齐；按钮顺序为主→次；校验错误时输入框加 <code>.err</code> 并关联 <code>aria-invalid</code>。</div>
+  </div>
+
+  <div class="panel"><h3>卡片 Card</h3><p class="desc">通用内容容器</p>
+    <div class="card"><h3 style="margin:0 0 4px">晋级进度</h3><p class="desc" style="margin:0 0 10px">再得 60 分晋级</p><div class="progress"><i style="width:60%"></i></div></div>
+  </div>
+
+  <div class="panel"><h3>标签页 Tabs</h3><p class="desc">同层级视图切换</p>
+    <div class="tabs"><button class="active">每日单词</button><button>组词练习</button><button>闯关积分</button></div>
+    <div class="rule"><b>规则</b>：移动端 Tabs 可降级为底部导航（BottomNav）；切换时内容区加 <code>.view</code> 淡入动画。</div>
+  </div>
+
+  <div class="panel"><h3>列表项 ListItem</h3><p class="desc">勾选 / 状态行</p>
+    <div class="card" style="padding:10px">
+      <div class="stage" style="justify-content:flex-start;gap:10px"><button class="btn" style="width:26px;height:26px;padding:0;border-radius:8px;background:var(--success);border-color:var(--success);color:#fff">✓</button><div><div style="font-weight:600">unhappy</div><div style="font-size:12px;color:var(--text-faint)">/ʌnˈhæpi/ · 不高兴的</div></div></div>
+    </div>
+  </div>
+
+  <div class="panel"><h3>对话框 Modal</h3><p class="desc">确认 / 详情</p>
+    <div class="modal"><div class="ov"></div><h3 style="margin:0 0 6px;position:relative">确认清空数据</h3><p style="font-size:13px;color:var(--text-soft);position:relative">本操作不可撤销，将删除全部进度。</p><div class="stage" style="position:relative;justify-content:flex-end"><button class="btn sm">取消</button><button class="btn sm danger">确认清空</button></div></div>
+  </div>
+
+  <div class="panel"><h3>抽屉 Drawer</h3><p class="desc">设置等侧边面板</p>
+    <div class="drawer"><h3 style="margin:0 0 12px">设置</h3><div class="fld"><label class="label">深色模式</label><div class="stage" style="justify-content:space-between"><label class="switch"><input type="checkbox"><span class="tk"></span><span class="kb"></span></label></div></div><div class="fld"><label class="label">同步码</label><input class="input" value="LEXI-2026"></div></div>
+  </div>
+</div>
+
+<!-- ============ 3 业务组件 ============ -->
+<h2 class="sec" id="business"><span class="n">3</span>业务组件</h2>
+<p class="lead">承载 LexiQuest 领域语义，依赖真实词库（lib/words.ts）与状态模型（lib/types.ts）。</p>
+
+<div class="grid g2">
+  <div class="panel"><h3>人群选择卡 GroupCard</h3><p class="desc">年龄段入口，3 选 1</p>
+    <div class="stage" style="flex-direction:column;align-items:stretch">
+      <div class="wordcard" style="cursor:pointer"><div class="avatar" style="width:46px;height:46px;border-radius:13px">🧒</div><div style="font-weight:700;margin-top:6px">儿童启蒙</div><div class="tag" style="margin:0">6-12 岁</div><div style="font-size:12px;color:var(--text-faint)">趣味单词 + 简单词素拆分</div></div>
+    </div>
+    <div class="code"><span class="c">&lt;button</span> <span class="a">class</span>=<span class="t">"group-card"</span> <span class="a">data-group</span>=<span class="t">"children"</span> <span class="a">id</span>=<span class="t">"group-children"</span><span class="c">&gt;</span>…<span class="c">&lt;/button&gt;</span></div>
+  </div>
+
+  <div class="panel"><h3>单词翻转卡 WordCard</h3><p class="desc">正面词义 / 背面词素拆分</p>
+    <div class="wordcard">
+      <div class="w">unhappy</div><div class="p">/ʌnˈhæpi/</div><span class="pos">adj. 形容词</span>
+      <div class="partrow"><span class="part pre">un-</span><span class="part base">happy</span></div>
+      <div style="font-size:12px;color:var(--text-soft)">不高兴的 · 例句：The unhappy boy left.</div>
+    </div>
+    <div class="rule"><b>规则</b>：词素按 type 着色（pre/root/suf/base）；点击整卡翻转，朗读按钮需 <code>stopPropagation</code> 避免误翻。</div>
+  </div>
+
+  <div class="panel"><h3>今日待办 TodayList</h3><p class="desc">当日单词进度</p>
+    <div class="card" style="padding:10px">
+      <div class="stage" style="justify-content:flex-start;gap:10px"><button class="btn" style="width:26px;height:26px;padding:0;border-radius:8px;background:var(--success);border-color:var(--success);color:#fff">✓</button><div><div style="font-weight:600">unhappy</div><div style="font-size:12px;color:var(--text-faint)">已完成 · +10</div></div></div>
+      <hr style="border:none;border-top:1px dashed var(--border);margin:8px 0">
+      <div class="stage" style="justify-content:flex-start;gap:10px"><button class="btn" style="width:26px;height:26px;padding:0;border-radius:8px"> </button><div><div style="font-weight:600">teacher</div><div style="font-size:12px;color:var(--text-faint)">待学习</div></div></div>
+    </div>
+  </div>
+
+  <div class="panel"><h3>组词练习 QuizItem</h3><p class="desc">多选 + 即时反馈</p>
+    <div style="border:1px solid var(--border);border-radius:var(--radius);padding:14px">
+      <div style="font-weight:600;margin-bottom:4px">选出由 play 构成的词：</div>
+      <div style="font-size:12px;color:var(--text-faint);margin-bottom:10px">play = 玩</div>
+      <div class="opt sel"><span class="bx">✓</span>player</div>
+      <div class="opt right"><span class="bx">✓</span>playing</div>
+      <div class="opt"><span class="bx"> </span>happy</div>
+    </div>
+    <div class="rule"><b>规则</b>：提交前选项可切换；提交后展示 <code>.right/.wrong</code> 并解锁解析；答对 +20 分。</div>
+  </div>
+
+  <div class="panel"><h3>段位看板 LevelBoard</h3><p class="desc">闯关积分成长</p>
+    <div class="card"><h3 style="margin:0 0 4px">闯关积分</h3><div class="stage" style="gap:18px"><div style="text-align:center"><div style="font-size:22px;font-weight:800;color:var(--primary)">180</div><div style="font-size:12px;color:var(--text-faint)">总积分</div></div><div style="text-align:center"><div style="font-size:22px;font-weight:800;color:var(--primary)">Lv.3</div><div style="font-size:12px;color:var(--text-faint)">段位</div></div></div><div class="progress" style="margin-top:10px"><i style="width:45%"></i></div></div>
+  </div>
+
+  <div class="panel"><h3>底部导航 BottomNav</h3><p class="desc">移动端主视图切换</p>
+    <div style="border:1px solid var(--border);border-radius:var(--radius);padding:10px;display:flex;gap:6px;background:#fff">
+      <div class="navitem active" style="flex:1"><span>📖</span>单词</div>
+      <div class="navitem" style="flex:1"><span>🧩</span>组词</div>
+      <div class="navitem" style="flex:1"><span>🏆</span>闯关</div>
+    </div>
+    <div class="rule"><b>规则</b>：BottomNav 与 Tabs 互斥；同一时刻仅一种导航可见（桌面 Tabs / 移动 BottomNav）。</div>
+  </div>
+
+  <div class="panel"><h3>浮动操作 FAB</h3><p class="desc">主 CTA（如「开始今日学习」）</p>
+    <div class="stage" style="min-height:60px;justify-content:center"><button class="fab">▶</button></div>
+  </div>
+
+  <div class="panel"><h3>空状态 EmptyState</h3><p class="desc">无数据 / 未选择时</p>
+    <div class="empty">🎉 今天已经全部完成，明天再来吧！</div>
+  </div>
+
+  <div class="panel"><h3>Toast 提示</h3><p class="desc">轻量操作反馈</p>
+    <div style="position:relative;min-height:70px" class="toast" style="position:static">已完成 +10 分</div>
+  </div>
+</div>
+
+<!-- ============ 4 使用规则 ============ -->
+<h2 class="sec" id="rules"><span class="n">4</span>组件使用规则</h2>
+<div class="panel">
+<table class="tbl">
+  <thead><tr><th style="width:200px">规则</th><th>说明</th></tr></thead>
+  <tbody>
+    <tr><td>语义化 id</td><td>所有可交互元素、主要容器加 kebab-case 语义 id（如 <code>#settingsBtn</code>、<code>#today-panel</code>），便于脚本定位与无障碍。</td></tr>
+    <tr><td>触控目标</td><td>按钮 / 选项 / 图标按钮最小高度 44px（小号 38px），间距充足，避免误触。</td></tr>
+    <tr><td>双主题</td><td>所有颜色走 CSS 变量（var(--*)）；深色态由 <code>html.dark</code> 切换，组件无需改色。</td></tr>
+    <tr><td>状态反馈</td><td>操作后用 Toast 反馈；表单错误用 <code>.err</code> + <code>aria-invalid</code>；加载用 <code>.syncing</code> 状态点。</td></tr>
+    <tr><td>动效克制</td><td>翻转、淡入、抽屉滑入等动效 ≤0.5s；尊重 <code>prefers-reduced-motion</code>。</td></tr>
+    <tr><td>真实数据</td><td>业务组件默认绑定 <code>lib/words.ts</code> 真实词库，原型用节选数据，不得编造字段。</td></tr>
+    <tr><td>可访问性</td><td>表单控件关联 label；图标按钮带 <code>title</code>/<code>aria-label</code>；切换类用 <code>role="switch"</code>。</td></tr>
+    <tr><td>响应式</td><td>桌面用 Header + Tabs；移动端（≤760px）Tabs 降级为 BottomNav，栅格单列。</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p style="margin-top:30px;color:var(--text-faint);font-size:12px;text-align:center">LexiQuest 组件库规范 · 与 prototype.html / style-guide.html 协同使用</p>
+</div>
+</body>
+</html>

@@ -1,6 +1,6 @@
 {
   "name": "lexiquest",
-  "version": "2.0.2",
+  "version": "2.0.6",
   "private": true,
   "description": "英语闯关台 LexiQuest · 多年龄段英语学习工作台（Next.js + 腾讯云 EdgeOne Pages，Edge KV 云端同步）",
   "keywords": [

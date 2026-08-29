@@ -4,6 +4,38 @@
 
 ## [Unreleased]
 
+### 清理（冗余移除）
+- 删除 `review_results.json`（107KB 静态分析脚本中间产物，无代码引用，已从 git 跟踪移除）。
+- 删除 `REVIEW-2026-08-28.md`：与 `REVIEW.md` §七 修复闭环结论重复的带日期审查副本。
+- 删除本地构建/安装日志冗余（`build_log.txt` / `build2_log.txt` / `lockonly_log.txt` / `npm_install_log.txt`，均已被 `.gitignore` 忽略）。
+
+## [2.0.5] - 2026-08-29
+
+### 修复（原型审查整改）
+- **P0 交互状态丢失**：重构 `prototype.html` 事件绑定，翻转卡、今日勾选、组词提交、设置抽屉改为局部 DOM 更新（新增 `renderTab`/`openDrawer`/`bindLocal`/`updatePoints`），不再整页 `render()`，跨操作保留翻卡与积分状态。
+- **P1 令牌漂移**：`tokens.css` 暗色模式新增与 `app/globals.css` 一致的真实阴影（`--shadow/--shadow-lg` 改为 `rgba(0,0,0,.35/.5)`）；删除未使用的死代码 `--c-ch/--c-tn/--c-ad`。
+- **P1 死代码清理**：移除 `prototype.html` 中未使用的 `PART_COLOR`、`COMPONENT_MAP`/`MAP` 常量。
+- **P2 可访问性**：翻转卡加 `role="button" aria-pressed tabindex`（支持键盘翻转）；组词选项加 `role="checkbox" aria-checked`；设置抽屉加 `role="dialog" aria-modal` + Esc 关闭 + 焦点陷阱；图标按钮补 `aria-label`；tablist/tab/tabpanel 语义补全。
+- **P3 映射统一**：`prototype.html` 各区块写入 `data-component` 指向 `app/components/*`；`wireframes.html`/`flows.html` 补「对应组件见 index.html 映射表」说明，并修正两文件残留的 `v2.0.2` 标题为 v2.0.5。
+- 五份原型标题统一同步至 v2.0.5。
+
+## [2.0.4] - 2026-08-29
+
+### 改进（原型完善）
+- 抽取共享设计令牌 `prototype/tokens.css`（与 `app/globals.css` 对齐），4 份原型 HTML 改为 `<link>` 引入，消除各文件内联令牌重复与漂移风险。
+- 新增 `prototype/index.html` 原型门户：统一导航 + 原型区块到真实组件（app/components/*）的映射表，作为原型体系入口。
+- `prototype.html` 增强：词素元素加悬停释义（title）、积分/连续打卡数字滚动动画、今日全部完成时的真实空状态、`prefers-reduced-motion` 动效降级，并标注各区块对应实现组件。
+- 四份原型标题统一同步至 v2.0.4。
+
+## [2.0.3] - 2026-08-29
+
+### 新增（原型设计体系）
+- 新增 `prototype.html`：高保真可交互主原型，含人群选择、每日单词翻转卡（词素着色 + 朗读）、组词练习（多选即时反馈）、闯关积分看板、设置抽屉与深色模式，使用 `lib/words.ts` 真实词库节选数据。
+- 新增 `wireframes.html`：组件库规范，覆盖基础组件（按钮/输入框/开关等）、复合组件（表单/卡片/抽屉等）、业务组件（人群卡/翻转卡/组词题/段位看板等）及使用规则。
+- 新增 `style-guide.html`：视觉设计系统，定义配色、词素语义色、字体排印、间距圆角、阴影层级与暗色主题。
+- 新增 `flows.html`：关键用户流程原型，含首次上手、每日单词学习、组词练习、闯关积分、云端同步五条主链路及分支/异常态。
+- 四份原型与代码库 `app/globals.css` 设计令牌保持一致，便于后续实现对齐。
+
 ### 修复（构建与依赖对齐）
 - **构建失败修复**：`.gitignore` 补充忽略 `.codebuddy/`（项目本地记忆目录），避免 EdgeOne 构建沙箱因克隆仓库缺失该目录、Next 16 Turbopack `stat('.codebuddy')` 触发 ENOENT 导致 `next build` 失败。
 

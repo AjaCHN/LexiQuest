@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>英语闯关台 LexiQuest · 关键用户流程 v2.0.5</title>
+<link rel="stylesheet" href="tokens.css" />
+<style>
+body{line-height:1.55}
+.wrap{max-width:1080px;margin:0 auto;padding:32px 20px 80px}
+header.top{border-bottom:2px solid var(--border);padding-bottom:18px}
+header.top h1{margin:0;font-size:26px;display:flex;align-items:center;gap:10px}
+header.top .badge{font-size:12px;font-weight:700;color:var(--primary);background:var(--primary-soft);padding:4px 10px;border-radius:999px}
+header.top p{color:var(--text-soft);font-size:14px;margin:8px 0 0}
+h2.sec{margin:42px 0 6px;font-size:20px;padding-top:14px;border-top:1px solid var(--border)}
+.lead{color:var(--text-soft);font-size:14px;margin:0 0 18px}
+.flow{background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:24px}
+.flow h3{margin:0 0 4px;font-size:16px;display:flex;align-items:center;gap:8px}
+.flow .desc{color:var(--text-faint);font-size:13px;margin:0 0 16px}
+.steps{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:6px}
+.step{flex:1;min-width:170px;display:flex;flex-direction:column;align-items:center;position:relative;padding:0 6px}
+.step .num{width:30px;height:30px;border-radius:50%;background:var(--primary);color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px;z-index:2}
+.step .screen{border:1px solid var(--border);border-radius:12px;background:var(--bg);padding:14px;margin-top:10px;width:100%;min-height:120px;box-shadow:var(--shadow)}
+.step .cap{margin-top:8px;font-size:12.5px;font-weight:600;text-align:center}
+.step .sub{font-size:11px;color:var(--text-faint);text-align:center;margin-top:2px}
+.step:not(:last-child)::after{content:"";position:absolute;top:15px;right:-50%;width:100%;height:2px;background:var(--border);z-index:1}
+.screen .ttl{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.screen .row{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:12px;border-bottom:1px dashed var(--border)}
+.screen .row:last-child{border:none}
+.screen .pill{font-size:11px;padding:3px 8px;border-radius:999px;background:var(--primary-soft);color:var(--primary);font-weight:600}
+.screen .pill.acc{background:var(--warn-soft);color:var(--warn)}
+.screen .pill.ok{background:#e7f7ec;color:var(--success)}
+.screen .pill.err{background:#fdeaea;color:var(--danger)}
+.screen .btn{display:inline-block;padding:6px 10px;border-radius:9px;background:var(--primary);color:#fff;font-size:11px;font-weight:600;margin-top:8px}
+.screen .grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px}
+.screen .box{border:1px solid var(--border);border-radius:8px;padding:6px;text-align:center}
+.screen .big{font-size:20px;font-weight:800;color:var(--primary);text-align:center;margin:6px 0}
+.part{display:inline-block;border-radius:6px;padding:2px 6px;font-size:11px;color:#fff;font-weight:600;margin:1px}
+.part.pre{background:var(--prefix)}.part.root{background:var(--root)}.part.suf{background:var(--suffix)}.part.base{background:var(--base)}
+.decision{border:2px dashed var(--warn);border-radius:12px;padding:10px;font-size:12px;color:var(--warn);font-weight:600;margin:12px 0;text-align:center;background:var(--warn-soft)}
+.alt{color:var(--text-faint);font-size:12px;margin-top:10px;padding-left:14px;border-left:3px solid var(--border)}
+@media(max-width:760px){.step{min-width:200px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <h1>关键用户流程 <span class="badge">LexiQuest · v2.0.5</span></h1>
+  <p>覆盖选人群→每日学习→组词练习→闯关积分→云端同步五条主链路，含分支与异常态。</p>
+  <p class="lead">每条流程的界面对应 <code>app/components/*</code> 真实组件，完整映射见 <a href="index.html">原型门户</a>。</p>
+</header>
+
+<!-- 流程1 首次上手 -->
+<h2 class="sec">流程 1 · 首次上手（选人群 → 进入学习）</h2>
+<p class="lead">新用户无本地数据，强制先选年龄段，建立学习上下文。</p>
+<div class="flow">
+  <h3>① 年龄段选择</h3>
+  <p class="desc">未选人群时仅显示选择页；选定后写入状态并进入主工作台。</p>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><div class="screen"><div class="ttl">🏠 启动</div><div class="box" style="border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center;font-size:11px">展示 3 个人群入口</div><div class="grid2" style="margin-top:8px"><div class="box">🧒 儿童</div><div class="box">🎓 青少年</div><div class="box">💼 成人</div><div class="box">未选 · 不可跳过</div></div></div><div class="cap">选择年龄段</div><div class="sub">3 选 1</div></div>
+    <div class="step"><div class="num">2</div><div class="screen"><div class="ttl">✅ 确认</div><div class="row">已选 <span class="pill">青少年学生</span></div><div class="btn">进入工作台 →</div></div><div class="cap">写入状态</div><div class="sub">state.group = teen</div></div>
+    <div class="step"><div class="num">3</div><div class="screen"><div class="ttl">📖 工作台</div><div class="row">今日 5 词 · 0/5</div><div class="row">★ 0 分 · 🔥 0 天</div></div><div class="cap">进入主界面</div><div class="sub">Tab: 单词/组词/闯关</div></div>
+  </div>
+  <div class="alt">分支：顶部「切换年龄段」按钮可随时回到第 1 步重选（不清除其他人群数据）。</div>
+</div>
+
+<!-- 流程2 每日单词学习 -->
+<h2 class="sec">流程 2 · 每日单词学习（翻转卡 + 勾选）</h2>
+<p class="lead">用户点开今日单词，翻转看词素拆分，朗读跟读，完成即勾选并积分。</p>
+<div class="flow">
+  <h3>② 单词学习闭环</h3>
+  <p class="desc">每个单词：正面词义 → 翻面看词素 + 例句 → 朗读 → 勾选完成 +10。</p>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><div class="screen"><div class="ttl">📖 今日单词</div><div class="box" style="border:1px solid var(--border);border-radius:8px;padding:6px"><b>unhappy</b><br><span style="color:var(--text-faint)">/ʌnˈhæpi/</span></div></div><div class="cap">展示正面</div><div class="sub">词义 + 音标</div></div>
+    <div class="step"><div class="num">2</div><div class="screen"><div class="ttl">🔄 翻转</div><div><span class="part pre">un-</span><span class="part base">happy</span></div><div style="font-size:10px;color:var(--text-faint);margin-top:4px">前缀不 + 基础词快乐</div></div><div class="cap">看拆分</div><div class="sub">词素着色</div></div>
+    <div class="step"><div class="num">3</div><div class="screen"><div class="ttl">🔊 朗读</div><div class="box" style="border:1px solid var(--border);border-radius:8px;padding:6px;text-align:center">🔊 播放发音</div><div class="sub" style="text-align:center;margin-top:4px">SpeechSynthesis</div></div><div class="cap">跟读</div><div class="sub">en-US</div></div>
+    <div class="step"><div class="num">4</div><div class="screen"><div class="ttl">✅ 完成</div><div class="row"><span class="pill ok">✓ done</span></div><div class="row">+10 分 · 🔥 +1</div></div><div class="cap">勾选</div><div class="sub">进度 1/5</div></div>
+  </div>
+  <div class="decision">⚠ 逾期判定：若昨日有词未完成且连续打卡 >3，首词标记「逾期」提醒</div>
+  <div class="alt">异常：浏览器不支持 SpeechSynthesis 时，朗读按钮点击提示「当前浏览器不支持朗读」，不报错。</div>
+</div>
+
+<!-- 流程3 组词练习 -->
+<h2 class="sec">流程 3 · 组词练习（多选 + 即时反馈）</h2>
+<p class="lead">基于词根/基础词出题，多选构词，提交后高亮正确/错误并展示解析，答对 +20。</p>
+<div class="flow">
+  <h3>③ 组词闯关</h3>
+  <p class="desc">从选项中选出由给定词素构成的词；可多选；提交后不可改，解锁解析。</p>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><div class="screen"><div class="ttl">🧩 题目</div><div style="font-size:11px">选出由 play 构成的词：</div><div class="row" style="justify-content:space-between"><span>player</span><span class="pill">可多选</span></div></div><div class="cap">读题</div><div class="sub">词根 play=玩</div></div>
+    <div class="step"><div class="num">2</div><div class="screen"><div class="ttl">☑ 选择</div><div class="row" style="justify-content:space-between"><span>player</span><span class="pill">sel</span></div><div class="row" style="justify-content:space-between"><span>playing</span><span class="pill">sel</span></div></div><div class="cap">勾选</div><div class="sub">可切换</div></div>
+    <div class="step"><div class="num">3</div><div class="screen"><div class="ttl">🚀 提交</div><div class="btn">提交答案</div><div class="sub" style="text-align:center;margin-top:6px">锁定选项</div></div><div class="cap">提交</div><div class="sub">禁用再改</div></div>
+    <div class="step"><div class="num">4</div><div class="screen"><div class="ttl">💡 反馈</div><div class="row"><span class="pill ok">✓ player</span></div><div class="row"><span class="pill err">✗ happy</span></div><div class="row">+20 分</div></div><div class="cap">看解析</div><div class="sub">答对+20</div></div>
+  </div>
+  <div class="alt">分支：答错不扣分，仅展示解析；同一题仅首次答对计分（重复提交不再 +20）。</div>
+</div>
+
+<!-- 流程4 闯关积分 -->
+<h2 class="sec">流程 4 · 闯关积分与段位</h2>
+<p class="lead">积分来自完成单词(+10)/组词(+20)，按阈值解锁段位，看板实时反映成长。</p>
+<div class="flow">
+  <h3>④ 成长看板</h3>
+  <p class="desc">积分累计 → 段位晋级（6 段）→ 进度条展示下一段位所需分数。</p>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><div class="screen"><div class="ttl">📊 总览</div><div class="big">180</div><div style="text-align:center;font-size:11px;color:var(--text-faint)">总积分</div></div><div class="cap">当前积分</div><div class="sub">来自学习</div></div>
+    <div class="step"><div class="num">2</div><div class="screen"><div class="ttl">🏅 段位</div><div class="row">Lv.3 构词达人</div><div class="row">需 250 分解锁</div></div><div class="cap">定位段位</div><div class="sub">LEVELS 阈值</div></div>
+    <div class="step"><div class="num">3</div><div class="screen"><div class="ttl">📈 进度</div><div class="box" style="border:1px solid var(--border);border-radius:8px;padding:6px"><div style="height:8px;background:var(--bg-sunken);border-radius:999px"><div style="height:100%;width:45%;background:var(--primary);border-radius:999px"></div></div></div><div class="sub" style="text-align:center;margin-top:4px">距 Lv.4 还 20 分</div></div><div class="cap">晋级进度</div><div class="sub">实时计算</div></div>
+    <div class="step"><div class="num">4</div><div class="screen"><div class="ttl">🔓 解锁</div><div class="row"><span class="pill ok">★ Lv.4 达成</span></div><div class="row">闯关高手</div></div><div class="cap">晋级</div><div class="sub">满阈值触发</div></div>
+  </div>
+</div>
+
+<!-- 流程5 云端同步 -->
+<h2 class="sec">流程 5 · 云端同步（Edge KV）</h2>
+<p class="lead">无需登录：填写同步码 + 开关即启用；多设备同码共享进度，离线降级本地。</p>
+<div class="flow">
+  <h3>⑤ 同步设置</h3>
+  <p class="desc">设置抽屉内配置：云端开关、同步码、状态指示灯；支持导出/导入/清空。</p>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><div class="screen"><div class="ttl">⚙ 设置</div><div class="row" style="justify-content:space-between">深色模式 <span class="pill">开关</span></div><div class="row" style="justify-content:space-between">云端同步 <span class="pill">ON</span></div></div><div class="cap">打开抽屉</div><div class="sub">点击齿轮</div></div>
+    <div class="step"><div class="num">2</div><div class="screen"><div class="ttl">🔑 同步码</div><div class="box" style="border:1px solid var(--border);border-radius:8px;padding:6px;font-size:11px">LEXI-2026</div><div class="sub" style="text-align:center;margin-top:4px">多设备一致</div></div><div class="cap">填同步码</div><div class="sub">KV key</div></div>
+    <div class="step"><div class="num">3</div><div class="screen"><div class="ttl">🔄 状态</div><div class="row"><span class="pill ok">● 已同步</span></div><div class="sub" style="text-align:center;margin-top:4px">写入 KV</div></div><div class="cap">同步中</div><div class="sub">syncing→synced</div></div>
+    <div class="step"><div class="num">4</div><div class="screen"><div class="ttl">📱 跨设备</div><div class="box" style="border:1px solid var(--border);border-radius:8px;padding:6px;font-size:11px">同码读取进度</div></div><div class="cap">共享</div><div class="sub">免登录</div></div>
+  </div>
+  <div class="decision">⚠ 离线降级：网络失败时状态转「离线」，进度仍存本地，恢复后自动重试同步</div>
+  <div class="alt">数据管理：导出 JSON 备份；导入覆盖；清空需二次确认（confirm 弹窗）。</div>
+</div>
+
+<p style="margin-top:30px;color:var(--text-faint);font-size:12px;text-align:center">LexiQuest 关键用户流程 · 与 prototype.html / wireframes.html / style-guide.html 协同</p>
+</div>
+</body>
+</html>

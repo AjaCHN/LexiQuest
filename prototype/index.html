@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>英语闯关台 LexiQuest · 原型门户 v2.0.5</title>
+<link rel="stylesheet" href="tokens.css" />
+<style>
+body{line-height:1.6}
+.hero{max-width:1080px;margin:0 auto;padding:48px 24px 16px;text-align:center}
+.hero .logo{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,var(--primary),#8b5cf6);display:grid;place-items:center;color:#fff;margin:0 auto 18px}
+.hero h1{margin:0;font-size:30px}
+.hero p{color:var(--text-soft);max-width:620px;margin:12px auto 0;font-size:15px}
+.grid{max-width:1080px;margin:28px auto;padding:0 24px;display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+@media(max-width:760px){.grid{grid-template-columns:1fr;padding:0 16px}}
+.card{background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;text-decoration:none;color:inherit;transition:transform .15s,border-color .15s;display:block}
+.card:hover{transform:translateY(-3px);border-color:var(--primary)}
+.card .ic{font-size:26px}
+.card h2{margin:10px 0 4px;font-size:18px}
+.card .desc{color:var(--text-soft);font-size:13.5px;margin:0 0 12px;line-height:1.6}
+.card .tags{display:flex;flex-wrap:wrap;gap:6px}
+.card .tag{font-size:11px;padding:3px 9px;border-radius:999px;background:var(--bg-sunken);color:var(--text-soft)}
+.map{max-width:1080px;margin:40px auto;padding:0 24px}
+.map h2{border-top:1px solid var(--border);padding-top:20px;font-size:20px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--border)}
+th{background:var(--bg-sunken);color:var(--text-soft);font-weight:600;font-size:12px}
+tr:last-child td{border-bottom:none}
+code{background:var(--bg-sunken);padding:2px 6px;border-radius:6px;font-size:12px}
+.foot{text-align:center;color:var(--text-faint);font-size:12px;margin:40px 0 50px}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="logo">
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+  </div>
+  <h1>LexiQuest 原型门户</h1>
+  <p>多年龄段英语闯关台的高保真原型体系。所有页面共享 <code>tokens.css</code> 设计令牌，与 <code>app/globals.css</code> 保持同步。点击卡片进入对应原型。</p>
+</div>
+
+<div class="grid">
+  <a class="card" href="prototype.html">
+    <div class="ic">🎯</div>
+    <h2>高保真主原型</h2>
+    <p class="desc">可交互的完整产品原型：人群选择、每日单词翻转卡、组词练习、闯关积分、设置抽屉与深色模式，附真实词库数据。</p>
+    <div class="tags"><span class="tag">可交互</span><span class="tag">动效</span><span class="tag">深色模式</span></div>
+  </a>
+  <a class="card" href="wireframes.html">
+    <div class="ic">🧩</div>
+    <h2>组件库规范</h2>
+    <p class="desc">基础组件、复合组件、业务组件的视觉与交互约定，含使用规则表，供原型与实现对齐。</p>
+    <div class="tags"><span class="tag">基础</span><span class="tag">复合</span><span class="tag">业务</span></div>
+  </a>
+  <a class="card" href="style-guide.html">
+    <div class="ic">🎨</div>
+    <h2>视觉设计系统</h2>
+    <p class="desc">配色、词素语义色、字体排印、间距圆角、阴影层级与暗色主题预览，定义全站视觉语言。</p>
+    <div class="tags"><span class="tag">配色</span><span class="tag">字体</span><span class="tag">暗色</span></div>
+  </a>
+  <a class="card" href="flows.html">
+    <div class="ic">🔀</div>
+    <h2>关键用户流程</h2>
+    <p class="desc">首次上手、每日单词学习、组词练习、闯关积分、云端同步五条主链路，含分支与异常态。</p>
+    <div class="tags"><span class="tag">5 流程</span><span class="tag">分支</span><span class="tag">异常</span></div>
+  </a>
+</div>
+
+<div class="map">
+  <h2>原型区块 → 真实组件映射</h2>
+  <table>
+    <thead><tr><th>原型区块（id）</th><th>对应实现组件</th><th>数据来源</th></tr></thead>
+    <tbody>
+      <tr><td><code>#app-header</code> 人群切换</td><td>GroupSelector.tsx</td><td>GROUP_META（原型内置）</td></tr>
+      <tr><td><code>#today-panel</code> 今日待办</td><td>TodayPanel.tsx</td><td>lib/words.ts + 本地进度</td></tr>
+      <tr><td><code>#tab-content</code> 单词卡</td><td>WordCard.tsx</td><td>lib/words.ts</td></tr>
+      <tr><td><code>#tab-content</code> 组词题</td><td>FormationPractice.tsx</td><td>lib/words.ts（formation）</td></tr>
+      <tr><td><code>#tab-content</code> 闯关看板</td><td>ChallengePanel.tsx</td><td>LEVELS 阈值 + 积分</td></tr>
+      <tr><td><code>#settings-drawer</code> 设置</td><td>SettingsDrawer.tsx</td><td>localStorage / Edge KV</td></tr>
+      <tr><td>底部导航 / Tabs</td><td>app/components 共享</td><td>—</td></tr>
+    </tbody>
+  </table>
+  <p style="color:var(--text-faint);font-size:12.5px;margin-top:12px">说明：原型数据为 <code>lib/words.ts</code> 的节选，字段与真实类型 <code>lib/types.ts</code> 对齐；落地实现时直接复用组件文件，无需重写结构。</p>
+</div>
+
+<div class="foot">LexiQuest 原型门户 · v2.0.5 · 与 prototype / wireframes / style-guide / flows 协同</div>
+</body>
+</html>

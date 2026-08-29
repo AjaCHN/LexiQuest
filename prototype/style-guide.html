@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>英语闯关台 LexiQuest · 视觉设计系统 v2.0.5</title>
+<link rel="stylesheet" href="tokens.css" />
+<style>
+body{line-height:1.6}
+.wrap{max-width:1080px;margin:0 auto;padding:32px 20px 80px}
+header.top{border-bottom:2px solid var(--border);padding-bottom:18px}
+header.top h1{margin:0;font-size:26px}
+header.top .badge{font-size:12px;font-weight:700;color:var(--primary);background:var(--primary-soft);padding:4px 10px;border-radius:999px;margin-left:8px}
+header.top p{color:var(--text-soft);font-size:14px;margin:8px 0 0}
+h2.sec{margin:42px 0 14px;font-size:20px;padding-top:14px;border-top:1px solid var(--border)}
+.lead{color:var(--text-soft);font-size:14px;margin:0 0 18px}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:760px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.panel{background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:0 6px 22px rgba(31,36,48,.06)}
+.panel h3{margin:0 0 12px;font-size:15px}
+.sw{height:64px;border-radius:12px;display:flex;align-items:flex-end;padding:8px 10px;color:#fff;font-size:12px;font-weight:600;justify-content:space-between}
+.swatch{display:flex;flex-direction:column;gap:8px}
+.meta{font-size:12px;color:var(--text-soft)}
+.code{background:#0f1320;color:#e8ebf5;border-radius:10px;padding:10px 12px;font-family:ui-monospace,Menlo,monospace;font-size:12px;margin-top:10px}
+.typ{display:flex;align-items:baseline;gap:14px;padding:10px 0;border-bottom:1px solid var(--border)}
+.typ .name{width:120px;font-size:12px;color:var(--text-faint);flex:none}
+.tagdemo{display:flex;flex-wrap:wrap;gap:8px}
+.tag{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;font-size:13px;font-weight:600;background:var(--bg-sunken);color:var(--text-soft)}
+.space{display:flex;align-items:flex-end;gap:0;height:60px}
+.spc{background:var(--primary);border-radius:4px;opacity:.7}
+.rad{display:flex;gap:18px;align-items:center}
+.circle{width:56px;height:56px;background:var(--primary-soft);display:grid;place-items:center;color:var(--primary);font-weight:800}
+.elev{background:var(--bg-soft);border:1px solid var(--border);border-radius:12px;padding:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <h1>视觉设计系统 <span class="badge">LexiQuest · v2.0.5</span></h1>
+  <p>定义配色、字体、间距、圆角、阴影与词素语义色，确保 prototype / wireframes / 实现三端一致。</p>
+</header>
+
+<!-- 色彩 -->
+<h2 class="sec">1 · 色彩规范 Color</h2>
+<p class="lead">主色靛蓝（信任 + 学习），辅以琥珀（激励/连续打卡）、语义状态色。所有色彩以 CSS 变量承载，支持明暗双主题。</p>
+<div class="grid g4">
+  <div class="swatch"><div class="sw" style="background:var(--primary)">Primary</div><div class="meta">--primary #4f46e5</div></div>
+  <div class="swatch"><div class="sw" style="background:var(--accent)">Accent</div><div class="meta">--accent #f59e0b</div></div>
+  <div class="swatch"><div class="sw" style="background:var(--success)">Success</div><div class="meta">--success #16a34a</div></div>
+  <div class="swatch"><div class="sw" style="background:var(--danger)">Danger</div><div class="meta">--danger #dc2626</div></div>
+</div>
+<div class="grid g4" style="margin-top:16px">
+  <div class="swatch"><div class="sw" style="background:var(--bg-sunken);color:#1f2430">Surface</div><div class="meta">--bg-sunken #eef0f6</div></div>
+  <div class="swatch"><div class="sw" style="background:var(--border);color:#1f2430">Border</div><div class="meta">--border #e6e9f2</div></div>
+  <div class="swatch"><div class="sw" style="background:var(--text-faint);color:#fff">Text faint</div><div class="meta">--text-faint #97a0b5</div></div>
+  <div class="swatch"><div class="sw" style="background:var(--primary-soft);color:var(--primary)">Primary soft</div><div class="meta">--primary-soft #eef0ff</div></div>
+</div>
+<div class="code">:root { --primary:#4f46e5; --accent:#f59e0b; --success:#16a34a; --danger:#dc2626; }
+.dark { --bg:#0f1320; --bg-soft:#171c2c; --text:#e8ebf5; --primary:#7c8bff; }</div>
+
+<!-- 词素语义色 -->
+<h2 class="sec">2 · 词素语义色 Morpheme Colors</h2>
+<p class="lead">拆分记忆是产品核心，四种词素元素有固定语义色，全站统一使用。</p>
+<div class="tagdemo">
+  <span class="tag" style="background:var(--prefix);color:#fff">前缀 prefix · un-</span>
+  <span class="tag" style="background:var(--root);color:#fff">词根 root · spect</span>
+  <span class="tag" style="background:var(--suffix);color:#fff">后缀 suffix · -er</span>
+  <span class="tag" style="background:var(--base);color:#fff">基础词 base · happy</span>
+</div>
+<div class="code">.part.pre{background:var(--prefix)} .part.root{background:var(--root)}
+.part.suf{background:var(--suffix)} .part.base{background:var(--base)}</div>
+
+<!-- 字体 -->
+<h2 class="sec">3 · 字体排印 Typography</h2>
+<p class="lead">系统字体栈优先，中文回退 PingFang SC / 微软雅黑；标题加粗，正文舒适行高 1.6。</p>
+<div class="panel">
+  <div class="typ"><span class="name">标题 H1</span><span style="font-size:26px;font-weight:700">英语闯关台 LexiQuest</span></div>
+  <div class="typ"><span class="name">标题 H2</span><span style="font-size:20px;font-weight:700">今日要处理</span></div>
+  <div class="typ"><span class="name">正文 Body</span><span style="font-size:15px">拆分记忆让背单词更高效，词根词缀一目了然。</span></div>
+  <div class="typ"><span class="name">小字 Caption</span><span style="font-size:12px;color:var(--text-faint)">/ʌnˈhæpi/ · 不高兴的，不开心的</span></div>
+  <div class="typ"><span class="name">单词 Word</span><span style="font-size:22px;font-weight:700">unhappy</span></div>
+</div>
+
+<!-- 间距 -->
+<h2 class="sec">4 · 间距与栅格 Spacing</h2>
+<div class="grid g2">
+  <div class="panel"><h3>间距标尺（4 的倍数）</h3>
+    <div class="space" id="spc"></div>
+    <div class="meta" style="margin-top:8px">4 / 8 / 12 / 16 / 24 / 32 / 48 px</div>
+  </div>
+  <div class="panel"><h3>圆角 Radius</h3>
+    <div class="rad">
+      <div><div class="circle" style="border-radius:10px">10</div><div class="meta" style="text-align:center;margin-top:6px">sm</div></div>
+      <div><div class="circle" style="border-radius:16px">16</div><div class="meta" style="text-align:center;margin-top:6px">md</div></div>
+      <div><div class="circle" style="border-radius:999px">∞</div><div class="meta" style="text-align:center;margin-top:6px">pill</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 阴影与层级 -->
+<h2 class="sec">5 · 阴影与层级 Elevation</h2>
+<div class="grid g3">
+  <div class="elev" style="box-shadow:none">无阴影<br><span class="meta">扁平 / 输入控件</span></div>
+  <div class="elev" style="box-shadow:0 6px 22px rgba(31,36,48,.08)">卡片阴影<br><span class="meta">默认 --shadow</span></div>
+  <div class="elev" style="box-shadow:0 14px 40px rgba(31,36,48,.14)">浮层阴影<br><span class="meta">抽屉 / 模态 --shadow-lg</span></div>
+</div>
+
+<!-- 图标 -->
+<h2 class="sec">6 · 图标 Iconography</h2>
+<p class="lead">线性图标（stroke 2px），圆角端点；语义：书=学习、拼图=组词、奖杯=闯关、齿轮=设置、太阳/月亮=主题。</p>
+<div class="tagdemo">
+  <span class="tag">📖 每日单词</span><span class="tag">🧩 组词练习</span><span class="tag">🏆 闯关积分</span><span class="tag">⚙ 设置</span><span class="tag">☀/🌙 主题</span><span class="tag">🔊 朗读</span><span class="tag">🔥 连续打卡</span><span class="tag">★ 积分</span>
+</div>
+
+<!-- 暗色预览 -->
+<h2 class="sec">7 · 暗色主题 Dark Mode</h2>
+<p class="lead">通过 <code>html.dark</code> 切换，自动替换背景 / 文本 / 主色变量，组件无需改色即可适配。</p>
+<div class="panel" style="background:#0f1320;color:#e8ebf5;border-color:#262d40">
+  <h3 style="color:#e8ebf5">深色卡片示例</h3>
+  <p style="color:#a3acc4;font-size:14px;margin:0">背景 #0f1320 · 卡片 #171c2c · 主色 #7c8bff · 文本 #e8ebf5</p>
+  <div class="tagdemo" style="margin-top:12px"><span class="tag" style="background:#1d2340;color:#7c8bff">★ 180</span><span class="tag" style="background:#2a2110;color:#fbbf24">🔥 7</span></div>
+</div>
+
+<p style="margin-top:30px;color:var(--text-faint);font-size:12px;text-align:center">LexiQuest 视觉设计系统 · 与 prototype.html / wireframes.html 协同使用</p>
+</div>
+<script>/* 间距标尺自动生成 */var s=document.getElementById('spc');[4,8,12,16,24,32,48].forEach(function(w){var d=document.createElement('div');d.className='spc';d.style.width=w+'px';d.style.height=w+'px';s.appendChild(d);});</script>
+</body>
+</html>

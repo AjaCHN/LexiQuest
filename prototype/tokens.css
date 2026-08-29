@@ -1,0 +1,79 @@
+/* ============================================================
+   LexiQuest 原型共享设计令牌 · 单一来源
+   与 app/globals.css 保持同步。所有 prototype/*.html 通过
+   <link rel="stylesheet" href="tokens.css"> 引入，禁止在各文件内联重复定义。
+   版本: v2.0.5
+   ============================================================ */
+:root {
+  --bg: #f5f6fb;
+  --bg-soft: #ffffff;
+  --bg-sunken: #eef0f6;
+  --text: #1f2430;
+  --text-soft: #5b6478;
+  --text-faint: #97a0b5;
+  --border: #e6e9f2;
+  --primary: #4f46e5;
+  --primary-soft: #eef0ff;
+  --primary-text: #ffffff;
+  --accent: #f59e0b;
+  --success: #16a34a;
+  --success-soft: #e7f7ec;
+  --danger: #dc2626;
+  --danger-soft: #fdeaea;
+  --warn: #d97706;
+  --warn-soft: #fdf3e3;
+  --prefix: #2563eb;
+  --root: #16a34a;
+  --suffix: #db2777;
+  --base: #7c3aed;
+  --shadow: 0 6px 22px rgba(31, 36, 48, 0.08);
+  --shadow-lg: 0 14px 40px rgba(31, 36, 48, 0.14);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+.dark {
+  --bg: #0f1320;
+  --bg-soft: #171c2c;
+  --bg-sunken: #11151f;
+  --text: #e8ebf5;
+  --text-soft: #a3acc4;
+  --text-faint: #6b748f;
+  --border: #262d40;
+  --primary: #7c8bff;
+  --primary-soft: #1d2340;
+  --primary-text: #0f1320;
+  --accent: #fbbf24;
+  --success: #34d399;
+  --success-soft: #10281f;
+  --danger: #f87171;
+  --danger-soft: #2a1518;
+  --warn: #fbbf24;
+  --warn-soft: #2a2110;
+  --prefix: #60a5fa;
+  --root: #4ade80;
+  --suffix: #f472b6;
+  --base: #a78bfa;
+  /* 暗色阴影与 app/globals.css 对齐：用更深的半透明黑，避免浅色阴影在深背景上发虚 */
+  --shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 14px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* 基础重置（原型通用，避免每个文件重复） */
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg); color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+button { font-family: inherit; cursor: pointer; }
+a { color: var(--primary); }
+
+/* 尊重用户的减少动效偏好（无障碍底线） */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
