@@ -66,12 +66,20 @@ export default function FormationPractice({
                 else if (chosen.includes(i)) cls += " wrong";
               }
               return (
-                <div
-                  className={cls}
-                  key={i}
-                  onClick={() => toggle(c.id, i)}
-                  role="button"
-                >
+              <div
+                className={cls}
+                key={i}
+                role="button"
+                tabIndex={0}
+                aria-pressed={chosen.includes(i)}
+                onClick={() => toggle(c.id, i)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    toggle(c.id, i);
+                  }
+                }}
+              >
                   <span className="box">
                     {sub && isAnswer ? (
                       <IconCheck />

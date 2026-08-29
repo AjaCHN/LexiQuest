@@ -27,18 +27,26 @@ export default function GroupSelector({
         {ORDER.map((g) => {
           const m = GROUP_META[g];
           return (
-            <button
+            <div
               key={g}
               className="group-card"
+              role="button"
+              tabIndex={0}
               onClick={() => onSelect(g)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onSelect(g);
+                }
+              }}
             >
               <div className="emoji" style={{ background: m.color }}>
                 {icons[g]}
               </div>
-              <h3>{m.name}</h3>
+              <span className="title">{m.name}</span>
               <div className="tag">{m.range}</div>
               <p>{m.desc}</p>
-            </button>
+            </div>
           );
         })}
       </div>

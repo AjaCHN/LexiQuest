@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { AgeGroup, GROUP_META, WordEntry } from "../lib/types";
+import { AgeGroup, GROUP_META, WordEntry, readableTextOn } from "../lib/types";
 import {
   createProgress,
   seedSample,
@@ -219,7 +219,7 @@ export default function Page() {
   // ---------- 未选择人群 ----------
   if (!progress) {
     return (
-      <div className="app">
+      <main className="app">
         <div className="hd">
           <div className="logo">
             <IconLogo />
@@ -230,8 +230,12 @@ export default function Page() {
           </div>
         </div>
         <GroupSelector onSelect={handleSelectGroup} />
-        {toast && <div className="toast">{toast}</div>}
-      </div>
+        {toast && (
+          <div className="toast" role="status" aria-live="polite">
+            {toast}
+          </div>
+        )}
+      </main>
     );
   }
 
@@ -243,7 +247,7 @@ export default function Page() {
     .filter(Boolean) as WordEntry[];
 
   return (
-    <div id="lexiquest-app" className="app">
+    <main id="lexiquest-app" className="app">
       <div id="app-header" className="hd">
         <div className="logo">
           <IconLogo />
@@ -255,9 +259,10 @@ export default function Page() {
         <div className="spacer" />
         <button
           className="chip"
-          style={{ background: m.color, color: "#fff", borderColor: "transparent" }}
+          style={{ background: m.color, color: readableTextOn(m.color), borderColor: "transparent" }}
           onClick={() => setProgress(null)}
           title="切换年龄段"
+          aria-label="切换年龄段"
         >
           {m.name}
         </button>
@@ -267,30 +272,68 @@ export default function Page() {
         <span className="chip flame">
           <IconFlame size={14} /> {progress.streak}
         </span>
-        <button className="iconbtn" onClick={handleToggleTheme} title="切换主题">
+        <button
+          className="iconbtn"
+          onClick={handleToggleTheme}
+          title="切换主题"
+          aria-label="切换深浅色主题"
+        >
           {theme === "dark" ? <IconSun /> : <IconMoon />}
         </button>
-        <button className="iconbtn" onClick={() => setSettingsOpen(true)} title="设置">
+        <button
+          className="iconbtn"
+          onClick={() => setSettingsOpen(true)}
+          title="设置"
+          aria-label="打开设置"
+        >
           <IconSettings />
         </button>
       </div>
 
       <TodayPanel plan={plan!} wordMap={wordMap} onToggle={handleToggleWord} />
 
-      <div id="main-tabs" className="tabs">
+      <div
+        id="main-tabs"
+        className="tabs"
+        role="tablist"
+        aria-label="学习模块"
+        onKeyDown={(e) => {
+          const order: Tab[] = ["words", "formation", "challenge"];
+          const idx = order.indexOf(activeTab);
+          if (e.key === "ArrowRight") {
+            const next = order[(idx + 1) % order.length];
+            setActiveTab(next);
+          } else if (e.key === "ArrowLeft") {
+            const next = order[(idx - 1 + order.length) % order.length];
+            setActiveTab(next);
+          }
+        }}
+      >
         <button
+          role="tab"
+          id="tab-words"
+          aria-selected={activeTab === "words"}
+          aria-controls="panel-words"
           className={activeTab === "words" ? "active" : ""}
           onClick={() => setActiveTab("words")}
         >
           <IconBook size={16} /> 每日单词
         </button>
         <button
+          role="tab"
+          id="tab-formation"
+          aria-selected={activeTab === "formation"}
+          aria-controls="panel-formation"
           className={activeTab === "formation" ? "active" : ""}
           onClick={() => setActiveTab("formation")}
         >
           <IconPuzzle size={16} /> 组词练习
         </button>
         <button
+          role="tab"
+          id="tab-challenge"
+          aria-selected={activeTab === "challenge"}
+          aria-controls="panel-challenge"
           className={activeTab === "challenge" ? "active" : ""}
           onClick={() => setActiveTab("challenge")}
         >
@@ -299,7 +342,12 @@ export default function Page() {
       </div>
 
       {activeTab === "words" && (
-        <>
+        <div
+          id="panel-words"
+          role="tabpanel"
+          aria-labelledby="tab-words"
+          tabIndex={-1}
+        >
           <div className="section-title">
             <IconBook size={16} /> 今日单词 · 点击卡片看拆分记忆（悬停词素看释义）
           </div>
@@ -312,11 +360,16 @@ export default function Page() {
           ) : (
             <div className="empty">今天没有安排，去“闯关积分”看看你的进度吧！</div>
           )}
-        </>
+        </div>
       )}
 
       {activeTab === "formation" && (
-        <>
+        <div
+          id="panel-formation"
+          role="tabpanel"
+          aria-labelledby="tab-formation"
+          tabIndex={-1}
+        >
           <div className="section-title">
             <IconPuzzle size={16} /> 组词练习 · 用同一词根/基础词拼出更多词
           </div>
@@ -325,11 +378,16 @@ export default function Page() {
             formationDone={progress.formationDone}
             onComplete={handleCompleteFormation}
           />
-        </>
+        </div>
       )}
 
       {activeTab === "challenge" && (
-        <>
+        <div
+          id="panel-challenge"
+          role="tabpanel"
+          aria-labelledby="tab-challenge"
+          tabIndex={-1}
+        >
           <div className="section-title">
             <IconTrophy size={16} /> 闯关积分 · 你的成长看板
           </div>
@@ -345,7 +403,7 @@ export default function Page() {
               ))}
             </div>
           </div>
-        </>
+        </div>
       )}
 
       <div className="bottomnav">
@@ -385,7 +443,11 @@ export default function Page() {
         onClear={handleClear}
       />
 
-      {toast && <div className="toast">{toast}</div>}
-    </div>
+      {toast && (
+        <div className="toast" role="status" aria-live="polite">
+          {toast}
+        </div>
+      )}
+    </main>
   );
 }

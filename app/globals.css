@@ -4,17 +4,17 @@
   --bg-sunken: #eef0f6;
   --text: #1f2430;
   --text-soft: #5b6478;
-  --text-faint: #97a0b5;
+  --text-faint: #646e85;
   --border: #e6e9f2;
   --primary: #4f46e5;
   --primary-soft: #eef0ff;
   --primary-text: #ffffff;
   --accent: #f59e0b;
-  --success: #16a34a;
+  --success: #15803a;
   --success-soft: #e7f7ec;
   --danger: #dc2626;
   --danger-soft: #fdeaea;
-  --warn: #d97706;
+  --warn: #b45309;
   --warn-soft: #fdf3e3;
   --prefix: #2563eb;
   --root: #16a34a;
@@ -32,7 +32,7 @@
   --bg-sunken: #11151f;
   --text: #e8ebf5;
   --text-soft: #a3acc4;
-  --text-faint: #6b748f;
+  --text-faint: #828ca6;
   --border: #262d40;
   --primary: #7c8bff;
   --primary-soft: #1d2340;
@@ -88,6 +88,7 @@ button {
   align-items: center;
   gap: 10px;
   padding: 12px 14px;
+  background: var(--bg-soft);
   background: color-mix(in srgb, var(--bg-soft) 88%, transparent);
   backdrop-filter: saturate(1.4) blur(10px);
   border: 1px solid var(--border);
@@ -141,8 +142,8 @@ button {
   border-color: transparent;
 }
 .iconbtn {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--bg-sunken);
@@ -251,9 +252,11 @@ button {
   place-items: center;
   color: #fff;
 }
-.group-card h3 {
+.group-card .title {
+  display: block;
   margin: 4px 0 0;
   font-size: 16px;
+  font-weight: 600;
 }
 .group-card p {
   margin: 0;
@@ -764,6 +767,7 @@ button {
     right: 0;
     bottom: 0;
     z-index: 40;
+    background: var(--bg-soft);
     background: color-mix(in srgb, var(--bg-soft) 94%, transparent);
     backdrop-filter: blur(10px);
     border-top: 1px solid var(--border);
@@ -776,7 +780,8 @@ button {
     flex-direction: column;
     align-items: center;
     gap: 3px;
-    padding: 8px 4px;
+    padding: 10px 4px;
+    min-height: 44px;
     border: none;
     background: transparent;
     color: var(--text-faint);
@@ -809,4 +814,16 @@ button {
   color: var(--text-faint);
   padding: 30px 10px;
   font-size: 14px;
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

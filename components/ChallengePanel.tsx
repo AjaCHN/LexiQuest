@@ -42,7 +42,14 @@ export default function ChallengePanel({ progress }: { progress: UserProgress })
             ? `再赚 ${ni.toNext} 分即可晋级下一关`
             : "你已登顶，继续守护你的积分吧！"}
         </div>
-        <div className="lvl-bar">
+        <div
+          className="lvl-bar"
+          role="progressbar"
+          aria-valuenow={Math.round(ni.pct)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="距下一关进度"
+        >
           <i style={{ width: ni.pct + "%" }} />
         </div>
 

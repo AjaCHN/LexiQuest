@@ -10,6 +10,7 @@ const base = (size = 20) => ({
   strokeWidth: 2,
   strokeLinecap: "round" as const,
   strokeLinejoin: "round" as const,
+  "aria-hidden": "true" as const,
 });
 
 export const IconLogo = ({ size = 22 }: P) => (
@@ -72,7 +73,7 @@ export const IconTrash = ({ size = 20 }: P) => (
 );
 
 export const IconCheck = ({ size = 14 }: P) => (
-  <svg {...base(size)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3.5} strokeLinecap="round" strokeLinejoin="round">
+  <svg {...base(size)} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M20 6L9 17l-5-5" />
   </svg>
 );

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IconClose, IconDownload, IconUpload, IconTrash, IconSync, IconSun, IconMoon } from "./Icons";
 
 type SyncState = "local" | "syncing" | "synced" | "offline";
@@ -35,6 +35,20 @@ export default function SettingsDrawer({
 }) {
   const [code, setCode] = useState(syncCode);
   const [confirmClear, setConfirmClear] = useState(false);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (confirmClear) setConfirmClear(false);
+        else onClose();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    drawerRef.current?.focus();
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open, onClose, confirmClear]);
   if (!open) return null;
 
   const stateLabel: Record<SyncState, string> = {
@@ -46,9 +60,18 @@ export default function SettingsDrawer({
 
   return (
     <div id="settings-drawer-overlay" className="overlay" onClick={onClose}>
-    <div id="settings-drawer" className="drawer" onClick={(e) => e.stopPropagation()}>
+    <div
+      id="settings-drawer"
+      className="drawer"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="settings-title"
+      tabIndex={-1}
+      ref={drawerRef}
+      onClick={(e) => e.stopPropagation()}
+    >
         <div style={{ display: "flex", alignItems: "center" }}>
-          <h2>设置</h2>
+          <h2 id="settings-title">设置</h2>
           <button className="iconbtn" style={{ marginLeft: "auto" }} onClick={onClose}>
             <IconClose />
           </button>
@@ -77,6 +100,7 @@ export default function SettingsDrawer({
           </div>
           <input
             type="text"
+            aria-label="云端同步码"
             placeholder="设置同步码（多设备填同一个即可共享）"
             value={code}
             onChange={(e) => setCode(e.target.value)}
@@ -104,18 +128,25 @@ export default function SettingsDrawer({
             <button className="btn sm" onClick={onExport}>
               <IconDownload size={15} /> 导出 JSON
             </button>
-            <label className="btn sm" style={{ margin: 0 }}>
+            <button
+              type="button"
+              className="btn sm"
+              onClick={() => fileRef.current?.click()}
+            >
               <IconUpload size={15} /> 导入恢复
-              <input
-                type="file"
-                accept="application/json"
-                style={{ display: "none" }}
-                onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) onImport(f);
-                }}
-              />
-            </label>
+            </button>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="application/json"
+              style={{ display: "none" }}
+              aria-hidden="true"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) onImport(f);
+                e.target.value = "";
+              }}
+            />
           </div>
           <div className="note">
             本地数据存于浏览器，建议定期导出备份。导入会覆盖当前数据。
@@ -131,9 +162,15 @@ export default function SettingsDrawer({
       </div>
 
       {confirmClear && (
-        <div className="modal" onClick={() => setConfirmClear(false)}>
+        <div
+          className="modal"
+          role="alertdialog"
+          aria-modal="true"
+          aria-labelledby="confirm-title"
+          onClick={() => setConfirmClear(false)}
+        >
           <div className="box" onClick={(e) => e.stopPropagation()}>
-            <h3>确认清空？</h3>
+            <h3 id="confirm-title">确认清空？</h3>
             <p>
               将删除本机全部学习进度、积分与闯关记录，且无法恢复（云端数据不受影响）。
             </p>

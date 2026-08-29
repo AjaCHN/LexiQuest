@@ -83,3 +83,27 @@ export const GROUP_META: Record<
     desc: "职场与生活进阶词汇，拆解构词逻辑高效记忆",
   },
 };
+
+/**
+ * 依据背景色相对亮度返回对比足够的文字色。
+ * 与纯白/纯黑分别计算 WCAG 对比度，取更高者，确保小文字≥4.5:1、大文字≥3:1。
+ */
+export function readableTextOn(hex: string): string {
+  const c = hex.replace("#", "").trim();
+  const full =
+    c.length === 3
+      ? c
+          .split("")
+          .map((x) => x + x)
+          .join("")
+      : c.slice(0, 6);
+  const r = parseInt(full.slice(0, 2), 16) / 255;
+  const g = parseInt(full.slice(2, 4), 16) / 255;
+  const b = parseInt(full.slice(4, 6), 16) / 255;
+  const lin = (v: number) =>
+    v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+  const L = 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+  const contrastWhite = (1.0 + 0.05) / (L + 0.05);
+  const contrastBlack = (L + 0.05) / (0.0 + 0.05);
+  return contrastWhite >= contrastBlack ? "#ffffff" : "#0f172a";
+}

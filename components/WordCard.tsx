@@ -28,6 +28,7 @@ export default function WordCard({ word }: { word: WordEntry }) {
           </div>
           <button
             className="btn sm ghost flipbtn"
+            tabIndex={open ? -1 : 0}
             onClick={() => {
               setOpen(true);
               speak();
@@ -58,7 +59,11 @@ export default function WordCard({ word }: { word: WordEntry }) {
             <br />
             {word.example.zh}
           </div>
-          <button className="btn sm ghost flipbtn" onClick={() => setOpen(false)}>
+          <button
+            className="btn sm ghost flipbtn"
+            tabIndex={open ? 0 : -1}
+            onClick={() => setOpen(false)}
+          >
             返回
           </button>
         </div>
