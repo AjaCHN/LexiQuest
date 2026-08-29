@@ -447,7 +447,7 @@ export default function Page() {
               ))}
             </div>
           ) : (
-            <div className="empty">今日单词已全部学完啦！去「闯关积分」看看你离下一关还有多远</div>
+            <div className="empty">🎉 今天已经全部完成，明天再来吧！</div>
           )}
         </div>
       )}

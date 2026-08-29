@@ -5,6 +5,13 @@ import { IconPlay } from "./Icons";
 
 export default function WordCard({ word }: { word: WordEntry }) {
   const [open, setOpen] = useState(false);
+  // 与原型 PROTO_DATA 保持一致：词素类型中文标签，用于悬停释义提示。
+  const PART_LABEL: Record<string, string> = {
+    prefix: "前缀",
+    root: "词根",
+    suffix: "后缀",
+    base: "基础词",
+  };
   const speak = () => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       const u = new SpeechSynthesisUtterance(word.word);
@@ -54,7 +61,11 @@ export default function WordCard({ word }: { word: WordEntry }) {
           <div className="word">{word.word}</div>
           <div className="parts">
             {word.parts.map((p, i) => (
-              <span key={i} className={"part " + p.type}>
+              <span
+                key={i}
+                className={"part " + p.type}
+                title={`${PART_LABEL[p.type] || p.type} ${p.text}：${p.hint}`}
+              >
                 {p.text}
               </span>
             ))}
