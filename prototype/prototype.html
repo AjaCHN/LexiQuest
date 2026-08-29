@@ -303,6 +303,46 @@ button { font-family: inherit; cursor: pointer; }
   }
   .bottomnav button.active { color: var(--primary); }
   .hd .sub { display: none; }
+  }
+
+/* ===== 愉悦微交互（与 app 生产代码对齐；reduced-motion 由 tokens.css 全局归零） ===== */
+.btn { position: relative; overflow: hidden; }
+.btn::after {
+  content: ""; position: absolute; top: 0; left: -120%; width: 60%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,.45), transparent);
+  transform: skewX(-20deg); transition: left .5s;
+}
+.btn.primary:hover::after { left: 130%; }
+@keyframes popin { 0%{transform:scale(.9)} 60%{transform:scale(1.06)} 100%{transform:scale(1)} }
+.check.on { animation: popin .25s ease; }
+.opt.right { animation: popin .25s ease; }
+.opt.wrong { animation: shake .3s ease; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+.chip.flame:hover svg { animation: wiggle .6s ease; transform-origin: 70% 80%; }
+@keyframes wiggle { 0%,100%{transform:rotate(0)} 30%{transform:rotate(-12deg)} 60%{transform:rotate(10deg)} }
+.flip.open .flip-inner { animation: popin .3s ease; }
+.lvl.done .badge { animation: badgepulse 1.6s ease infinite; }
+@keyframes badgepulse { 0%,100%{box-shadow:0 0 0 0 rgba(21,128,58,.4)} 50%{box-shadow:0 0 0 6px rgba(21,128,58,0)} }
+.lvl-bar > i { position: relative; overflow: hidden; }
+.lvl-bar > i::after {
+  content: ""; position: absolute; inset: 0; left: -100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent);
+  animation: shimmer 2.2s linear infinite;
+}
+@keyframes shimmer { to { left: 100%; } }
+.hd .logo { cursor: pointer; transition: transform .2s; }
+.hd .logo:hover { transform: translateY(-3px) rotate(-4deg); }
+
+/* 庆祝层（纯装饰，aria-hidden；reduced-motion 下被 tokens.css 全局规则归零） */
+.celebration-layer { position: fixed; inset: 0; pointer-events: none; z-index: 90; overflow: hidden; }
+.celebrate-emoji {
+  position: absolute; font-size: 22px; will-change: transform, opacity;
+  animation: cel-float var(--dur,1.3s) cubic-bezier(.2,.7,.3,1) forwards;
+}
+@keyframes cel-float {
+  0% { transform: translate(-50%,-50%) scale(.4); opacity: 0; }
+  18% { opacity: 1; transform: translate(-50%,-50%) scale(1.1); }
+  100% { transform: translate(calc(-50% + var(--dx,0px)), calc(-50% - 90px)) scale(.9); opacity: 0; }
 }
 </style>
 </head>
@@ -310,6 +350,7 @@ button { font-family: inherit; cursor: pointer; }
 <div id="lexiquest-app" class="app">
   <!-- 动态内容由 JS 渲染 -->
 </div>
+<div class="celebration-layer" aria-hidden="true"></div>
 
 <script>
 /* ====== 真实数据（节选自 lib/words.ts） ====== */
@@ -422,6 +463,26 @@ function toast(msg){
   const t = document.createElement("div"); t.className="toast"; t.textContent=msg;
   document.body.appendChild(t); setTimeout(()=>t.remove(), 1600);
 }
+/* 庆祝层：纯装饰 emoji 迸发（aria-hidden；reduced-motion 下被 tokens.css 全局规则归零） */
+const CELE_POOL = ["🎉","✨","⭐","🌟","💫","🏆","🔥","💡","📚","🚀","🧠"];
+function centerOf(el){ const r = el.getBoundingClientRect(); return [r.left + r.width/2, r.top + r.height/2]; }
+function levelForPoints(p){ let lv = 1; for (const l of LEVELS) if (p >= l.need) lv = l.lv; return lv; }
+function fireCelebrate(x, y, count, emojis){
+  const layer = document.querySelector(".celebration-layer");
+  if (!layer) return;
+  const pool = (emojis && emojis.length) ? emojis : CELE_POOL;
+  const n = Math.min(Math.max(count || 14, 1), 40);
+  for (let i = 0; i < n; i++){
+    const s = document.createElement("span");
+    s.className = "celebrate-emoji";
+    s.textContent = pool[Math.floor(Math.random() * pool.length)];
+    s.style.left = x + "px"; s.style.top = y + "px";
+    s.style.setProperty("--dx", (Math.random()*160 - 80) + "px");
+    s.style.setProperty("--dur", (0.9 + Math.random()*0.6) + "s");
+    layer.appendChild(s);
+    setTimeout(() => s.remove(), 1700);
+  }
+}
 function todayStr(){
   const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 }
@@ -477,7 +538,7 @@ function renderSelect(){
     </button>`).join("");
   return `
   <div id="app-header" class="hd">
-    <div class="logo">${I.logo}</div>
+    <div class="logo" role="button" tabindex="0" aria-label="LexiQuest 庆祝彩蛋">${I.logo}</div>
     <div><div class="ttl">英语闯关台</div><div class="sub">多年龄段英语学习工作台</div></div>
   </div>
   <div class="view" style="margin-top:8px">
@@ -505,7 +566,7 @@ function renderMain(){
 
   return `
   <div id="app-header" class="hd" data-component="GroupSelector + 积分/主题/设置入口">
-    <div class="logo">${I.logo}</div>
+    <div class="logo" role="button" tabindex="0" aria-label="LexiQuest 庆祝彩蛋">${I.logo}</div>
     <div><div class="ttl">英语闯关台</div><div class="sub">多年龄段英语学习工作台</div></div>
     <div class="spacer"></div>
     <button class="chip" style="background:${m.color};color:#fff;border-color:transparent" id="switchGroup" title="切换年龄段">${m.name}</button>
@@ -690,6 +751,12 @@ function updatePoints(){
 }
 
 function bind(){
+  // 顶部 Logo 点击 / 键盘 → 全屏庆祝彩蛋（纯装饰，aria-hidden）
+  document.querySelectorAll('.hd .logo').forEach(l=>{
+    const go = ()=> fireCelebrate(...centerOf(l), 16, CELE_POOL);
+    l.onclick = go;
+    l.onkeydown = (e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } };
+  });
   // 选人群
   document.querySelectorAll(".group-card").forEach(b=>{
     b.onclick = ()=>{ state.group = b.dataset.group; state.tab="words"; render(); toast(`已选择 ${GROUP_META[state.group].name}`); };
@@ -734,8 +801,11 @@ function bindLocal(){
         state.doneWords.delete(id); state.points = Math.max(0, state.points-10);
         c.classList.remove("on"); c.innerHTML=""; row.classList.remove("done"); toast("已取消 -10 分");
       } else {
+        const beforeLv = levelForPoints(state.points);
         state.doneWords.add(id); state.points += 10;
         c.classList.add("on"); c.innerHTML=I.check; row.classList.add("done"); toast("已完成 +10 分");
+        fireCelebrate(...centerOf(c), 8, ["🎉","✨","⭐","💡"]);
+        if (levelForPoints(state.points) > beforeLv) fireCelebrate(window.innerWidth/2, 110, 24, ["🎉","🏆","⭐","🌟","✨","🚀","💫"]);
       }
       updatePoints();
     };
@@ -766,7 +836,10 @@ function bindLocal(){
       exp.style.display="block";
       exp.innerHTML = `<b>${correct?'答对了 🎉':'解析：'}</b> ${f.explanation}`;
       if (correct && !state.formationDone.has(qid)) {
+        const beforeLv = levelForPoints(state.points);
         state.formationDone.add(qid); state.points += 20; toast("组词完成 +20 分");
+        fireCelebrate(...centerOf(btn), 16, ["🎉","🏆","✨","💡","🧠"]);
+        if (levelForPoints(state.points) > beforeLv) fireCelebrate(window.innerWidth/2, 110, 24, ["🎉","🏆","⭐","🌟","✨","🚀","💫"]);
         updatePoints(); // 局部刷新积分，不整页 render 丢失翻卡状态
       }
     };
