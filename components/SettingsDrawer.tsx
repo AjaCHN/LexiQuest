@@ -72,7 +72,7 @@ export default function SettingsDrawer({
     >
         <div style={{ display: "flex", alignItems: "center" }}>
           <h2 id="settings-title">设置</h2>
-          <button className="iconbtn" style={{ marginLeft: "auto" }} onClick={onClose}>
+          <button className="iconbtn" style={{ marginLeft: "auto" }} aria-label="关闭设置" onClick={onClose}>
             <IconClose />
           </button>
         </div>

@@ -24,6 +24,7 @@ import {
   setCloudOn,
   pullCloud,
   pushCloud,
+  LEVELS,
 } from "../lib/storage";
 import { wordsByGroup, formationByGroup } from "../lib/words";
 import GroupSelector from "../components/GroupSelector";
@@ -64,6 +65,29 @@ function fireLogoBurst(el: EventTarget & Element) {
         y: r.top + r.height / 2,
         count: 16,
         emojis: ["✨", "⭐", "🌟", "🎉", "🚀", "🧠"],
+      },
+    })
+  );
+}
+
+// 晋级庆祝：定位闯关进度卡片（升级徽章所在），不存在则回退顶部居中
+function fireLevelUp() {
+  if (typeof window === "undefined") return;
+  const card = document.getElementById("challenge-progress-card");
+  let x = window.innerWidth / 2;
+  let y = 96;
+  if (card) {
+    const r = card.getBoundingClientRect();
+    x = r.left + r.width / 2;
+    y = r.top + r.height / 2;
+  }
+  window.dispatchEvent(
+    new CustomEvent("lexiquest:celebrate", {
+      detail: {
+        x,
+        y,
+        count: 24,
+        emojis: ["🎉", "🏆", "⭐", "🌟", "✨", "🚀", "💫"],
       },
     })
   );
@@ -169,32 +193,48 @@ export default function Page() {
 
   function handleToggleWord(id: string) {
     if (!progress) return;
+    const oldLevel = progress.level;
     const { progress: np, gained } = toggleWord(progress, id);
     const res = ensureToday(np);
     saveProgress(res.progress);
     setProgress(res.progress);
     setPlan(res.plan);
-    if (gained) showToast(gained > 0 ? `学会一个 +${gained} 分 ✨` : `已取消 -${-gained} 分`);
+    if (gained)
+      showToast(gained > 0 ? `学会一个 +${gained} 分` : `已取消 -${-gained} 分`);
+    if (np.level > oldLevel) {
+      const nl = np.level;
+      const title = LEVELS.find((l) => l.lv === nl)?.title ?? "";
+      showToast(`晋级 Lv.${nl} · ${title}！`);
+      fireLevelUp();
+    }
     syncPush(res.progress);
   }
 
   function handleCompleteFormation(id: string) {
     if (!progress) return;
+    const oldLevel = progress.level;
     const { progress: np, gained } = completeFormation(progress, id);
     saveProgress(np);
     setProgress(np);
-    showToast(`组词大成！+${gained} 分 🎉`);
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(
-        new CustomEvent("lexiquest:celebrate", {
-          detail: {
-            x: window.innerWidth / 2,
-            y: window.innerHeight * 0.42,
-            count: 18,
-            emojis: ["🎉", "🏆", "✨", "💡", "🧠"],
-          },
-        })
-      );
+    if (np.level > oldLevel) {
+      const nl = np.level;
+      const title = LEVELS.find((l) => l.lv === nl)?.title ?? "";
+      showToast(`晋级 Lv.${nl} · ${title}！`);
+      fireLevelUp();
+    } else {
+      showToast(`组词大成！+${gained} 分`);
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(
+          new CustomEvent("lexiquest:celebrate", {
+            detail: {
+              x: window.innerWidth / 2,
+              y: window.innerHeight * 0.42,
+              count: 18,
+              emojis: ["🎉", "🏆", "✨", "💡", "🧠"],
+            },
+          })
+        );
+      }
     }
     syncPush(np);
   }
@@ -400,7 +440,7 @@ export default function Page() {
               ))}
             </div>
           ) : (
-            <div className="empty">今日单词已全部学完啦！去「闯关积分」看看你离下一关还有多远 🏆</div>
+            <div className="empty">今日单词已全部学完啦！去「闯关积分」看看你离下一关还有多远</div>
           )}
         </div>
       )}

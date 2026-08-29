@@ -42,7 +42,11 @@ window.dispatchEvent(new CustomEvent("lexiquest:celebrate", {
 }));
 ```
 
+## 续作（第二轮 · 用户「继续推进」）
+- **闯关晋级定向庆祝**：`app/page.tsx` 新增 `fireLevelUp()`——在 `handleToggleWord` 与 `handleCompleteFormation` 加分后检测 `np.level > oldLevel`，若晋级则向 `#challenge-progress-card`（升级徽章所在）中心派发更盛大庆祝（count 24，含 🎉🏆⭐🌟✨🚀💫）；卡片不在 DOM（如正在 words tab）时回退到顶部居中。晋级优先于普通组词完成庆祝（避免 emoji 叠加），toast 升级为「🎉 晋级 Lv.X · 称号！」（称号取自 `LEVELS`）。
+- **连续打卡专属徽章**：`components/ChallengePanel.tsx` 新增 `STREAK_TIERS`（3/7/21/30/100 天五档：🌱稳步发芽 / 🔥一周小火苗 / 💪习惯养成家 / 🏆月度坚守者 / 👑百天传奇）+ `streakTier()` + `streakPraise()`。stat 行连续天数下动态渲染专属称号胶囊（`.streak-title`），「积分怎么赚」卡片的连续学习文案按天数动态鼓励（首日/未达标/里程碑）。`globals.css` 新增 `.streak-title` 静态胶囊样式：文字用主文字色 `--text`（绝对达标对比度），背景/边框用 `--accent` 半透明 + `color-mix` 纯色回退。
+- `npx tsc --noEmit` 通过（exit 0）。全部动效仍被 `prefers-reduced-motion` 归零，无新 live region、无键盘/语义破坏。
+
 ## 后续可扩展（未做，避免破坏 a11y/聚焦）
-- 闯关晋级时徽章处定向庆祝（需 ref 坐标）。
-- 连续 7 天打卡专属徽章文案/彩蛋。
+- 闯关晋级庆祝可改为"从当前等级徽章逐格点亮"的序列动画（需给每个 lvl 徽章加 ref 取坐标）。
 - Konami 彩虹模式**未采用**：会冲击已做好的对比度，违背 WCAG 底线。

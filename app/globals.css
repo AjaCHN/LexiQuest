@@ -987,6 +987,21 @@ button {
   }
 }
 
+/* 连续打卡里程碑专属徽章（文字用主文字色保证对比度，背景用 accent 半透明装饰） */
+.streak-title {
+  margin-top: 5px;
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+  background: rgba(245, 158, 11, 0.16);
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  border: 1px solid rgba(245, 158, 11, 0.32);
+  border: 1px solid color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -997,4 +1012,18 @@ button {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ---------- 键盘焦点可见性（WCAG 2.4.7 Focus Visible） ---------- */
+/* 仅键盘焦点显示可见焦点环，鼠标点击不显示，避免视觉干扰；
+   覆盖任何隐式 outline:none，确保 Tab 导航有清晰落点。 */
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline-offset: 0;
 }

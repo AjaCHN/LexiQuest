@@ -103,7 +103,7 @@ export default function FormationPractice({
             ) : (
               <div className="exp">
                 <IconSparkle size={14} />{" "}
-                <b>{correct ? "答对了，就是这个味 🎉" : "差一点点！再看看词根提示～"}</b>{" "}
+                <b>{correct ? "答对了，就是这个味！" : "差一点点！再看看词根提示～"}</b>{" "}
                 {c.explanation}
               </div>
             )}

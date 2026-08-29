@@ -3,6 +3,25 @@ import { UserProgress } from "../lib/types";
 import { LEVELS, nextLevelInfo, todayStr } from "../lib/storage";
 import { IconStar, IconFlame, IconTrophy } from "./Icons";
 
+// 连续打卡里程碑：按天数给专属称号与鼓励文案（品牌人格语气）
+const STREAK_TIERS = [
+  { min: 100, title: "百天传奇" },
+  { min: 30, title: "月度坚守者" },
+  { min: 21, title: "习惯养成家" },
+  { min: 7, title: "一周小火苗" },
+  { min: 3, title: "稳步发芽" },
+];
+function streakTier(s: number) {
+  return STREAK_TIERS.find((t) => s >= t.min) ?? null;
+}
+function streakPraise(s: number): string {
+  if (s <= 0) return "今天还没开始，先学一个词热热身";
+  if (s === 1) return "第一天打卡，旅程就此开始";
+  if (s < 7) return `连续 ${s} 天，再坚持几天解锁「一周小火苗」`;
+  const t = streakTier(s);
+  return `连续 ${s} 天 · ${t?.title}！稳住别断签`;
+}
+
 export default function ChallengePanel({ progress }: { progress: UserProgress }) {
   const ni = nextLevelInfo(progress.points);
   const doneToday = (() => {
@@ -29,6 +48,14 @@ export default function ChallengePanel({ progress }: { progress: UserProgress })
           <div className="l">
             <IconFlame size={13} /> 连续天数
           </div>
+          {(() => {
+            const t = streakTier(progress.streak);
+            return t ? (
+              <div className="streak-title">
+                {t.title}
+              </div>
+            ) : null;
+          })()}
         </div>
       </div>
 
@@ -103,7 +130,7 @@ export default function ChallengePanel({ progress }: { progress: UserProgress })
             <div className="badge">连</div>
             <div className="info">
               <div className="t">连续每天学习</div>
-              <div className="d">连续 {progress.streak} 天，稳住别断签 🔥</div>
+              <div className="d">{streakPraise(progress.streak)}</div>
             </div>
           </div>
         </div>

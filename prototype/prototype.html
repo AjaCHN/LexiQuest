@@ -90,8 +90,8 @@ button { font-family: inherit; cursor: pointer; }
 .group-card .emoji {
   width: 46px; height: 46px; border-radius: 13px; display: grid; place-items: center; color: #fff; font-size: 22px;
 }
-.group-card h3 { margin: 4px 0 0; font-size: 16px; }
-.group-card p { margin: 0; font-size: 12px; color: var(--text-faint); line-height: 1.5; }
+.group-card .title { margin: 4px 0 0; font-size: 16px; }
+.group-card .desc { margin: 0; font-size: 12px; color: var(--text-faint); line-height: 1.5; }
 .group-card .range { font-size: 11px; font-weight: 700; color: var(--text-soft); }
 
 /* ===== Today panel ===== */
@@ -375,6 +375,16 @@ const GROUP_META = {
   adult:    { name:"成人进阶", range:"22 岁以上", color:"#0ea5e9", emoji:"💼", desc:"职场与生活进阶词汇，拆解构词逻辑高效记忆" },
 };
 
+function readableTextOn(hex) {
+  const c = hex.replace('#', '').trim();
+  const full = c.length === 3 ? c.split('').map(x => x + x).join('') : c.slice(0, 6);
+  const r = parseInt(full.slice(0, 2), 16) / 255, g = parseInt(full.slice(2, 4), 16) / 255, b = parseInt(full.slice(4, 6), 16) / 255;
+  const lin = v => v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+  const L = 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+  const cw = (1.0 + 0.05) / (L + 0.05), cb = (L + 0.05) / 0.05;
+  return cw >= cb ? '#ffffff' : '#0f1320';
+}
+
 const LEVELS = [
   { lv:1, name:"启蒙新星", need:0 },
   { lv:2, name:"词汇积累者", need:100 },
@@ -461,9 +471,9 @@ function renderSelect(){
   const cards = Object.entries(GROUP_META).map(([k,m])=>`
     <button class="group-card" data-group="${k}" id="group-${k}">
       <div class="emoji" style="background:${m.color}">${m.emoji}</div>
-      <h3>${m.name}</h3>
+      <div class="title">${m.name}</div>
       <div class="range">${m.range}</div>
-      <p>${m.desc}</p>
+      <div class="desc">${m.desc}</div>
     </button>`).join("");
   return `
   <div id="app-header" class="hd">
@@ -537,7 +547,7 @@ function renderWords(todayWords){
           <div class="phon">${w.phonetic}</div>
           <span class="pos">${w.pos}</span>
           <div class="meaning">${w.meaning}</div>
-          <button class="speak flipbtn" data-speak="${w.word}" title="朗读">${I.speak}</button>
+          <button class="speak flipbtn" data-speak="${w.word}" title="朗读" aria-label="朗读 ${w.word}">${I.speak}</button>
         </div>
         <div class="face back">
           <div class="parts">
@@ -545,7 +555,7 @@ function renderWords(todayWords){
           </div>
           <div class="part-hint">${w.parts.map(p=>`${PART_LABEL[p.type]} ${p.text}：${p.hint}`).join(" ｜ ")}</div>
           <div class="ex"><b>例句：</b>${w.example.en}<br/>${w.example.zh}</div>
-          <button class="speak flipbtn" data-speak="${w.word}" title="朗读">${I.speak}</button>
+          <button class="speak flipbtn" data-speak="${w.word}" title="朗读" aria-label="朗读 ${w.word}">${I.speak}</button>
         </div>
       </div>
     </div>`).join("");
