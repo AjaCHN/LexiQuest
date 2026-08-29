@@ -301,7 +301,7 @@ export default function Page() {
       {activeTab === "words" && (
         <>
           <div className="section-title">
-            <IconBook size={16} /> 今日单词 · 点击卡片看拆分记忆
+            <IconBook size={16} /> 今日单词 · 点击卡片看拆分记忆（悬停词素看释义）
           </div>
           {todayWords.length ? (
             <div className="flip-grid">

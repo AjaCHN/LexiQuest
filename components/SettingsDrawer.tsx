@@ -39,7 +39,7 @@ export default function SettingsDrawer({
 
   const stateLabel: Record<SyncState, string> = {
     local: "本地模式",
-    syncing: "同步中",
+    syncing: "同步中…",
     synced: "已同步",
     offline: "离线",
   };

@@ -9,6 +9,14 @@
 - 删除 `REVIEW-2026-08-28.md`：与 `REVIEW.md` §七 修复闭环结论重复的带日期审查副本。
 - 删除本地构建/安装日志冗余（`build_log.txt` / `build2_log.txt` / `lockonly_log.txt` / `npm_install_log.txt`，均已被 `.gitignore` 忽略）。
 
+## [2.0.7] - 2026-08-29
+
+### 修复（应用与原型文案对齐）
+- `app/page.tsx` 今日单词标题补充「（悬停词素看释义）」，与原型高保真主原型一致。
+- `components/SettingsDrawer.tsx` 云端同步状态文案 `同步中` → `同步中…`（省略号），对齐原型。
+- `prototype/prototype.html` 移动端 header 副标题统一为「多年龄段英语学习工作台」，消除与原型桌面端/应用文案的不一致。
+- 注：等级系统（LEVELS 名称与阈值）已于 v2.0.5 原型整改中与应用 `lib/storage.ts` 对齐，本次为残余文案收口。
+
 ## [2.0.5] - 2026-08-29
 
 ### 修复（原型审查整改）
