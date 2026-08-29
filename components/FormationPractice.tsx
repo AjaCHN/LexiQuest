@@ -7,10 +7,12 @@ export default function FormationPractice({
   challenges,
   formationDone,
   onComplete,
+  onResult,
 }: {
   challenges: FormationChallenge[];
   formationDone: string[];
   onComplete: (id: string) => void;
+  onResult?: (id: string, correct: boolean) => void;
 }) {
   const [sel, setSel] = useState<Record<string, number[]>>({});
   const [submitted, setSubmitted] = useState<Record<string, boolean>>({});
@@ -32,6 +34,7 @@ export default function FormationPractice({
       c.answers.every((a) => chosen.includes(a));
     setSubmitted((s) => ({ ...s, [c.id]: true }));
     if (correct && !formationDone.includes(c.id)) onComplete(c.id);
+    onResult?.(c.id, correct);
   };
 
   if (!challenges.length)

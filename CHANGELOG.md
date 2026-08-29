@@ -4,6 +4,21 @@
 
 ## [Unreleased]
 
+## [2.0.10] - 2026-08-29
+
+### 改进（原型异常态落地到应用）
+- **同步失败提示**：`app/page.tsx` 的 `syncPush` 失败分支新增 toast——离线时提示「进度已存本地，联网后自动同步」，其他失败提示「进度已保留在本地」，将 `prototype/states.html` 的「云端同步失败」态真正转化为用户可见反馈。
+- **组词全错鼓励**：`components/FormationPractice.tsx` 新增可选 `onResult` 回调；组词提交全错时 `app/page.tsx` 弹出「没关系～看词根提示再试一次，记得更牢！」，落地 `prototype/states.html` 的「组词全错」态。
+
+## [2.0.9] - 2026-08-29
+
+### 改进（原型体系完善）
+- **数据去漂移**：新增 `scripts/gen-proto-data.mjs`（npm 脚本 `proto:data`），从 `lib/words.ts` 提取 `WORDS`/`FORMATION` 字面量生成 `prototype/data.js`（`window.PROTO_DATA`）；`prototype.html` 改为引用真实词库，消除手写数据重复与版本漂移。
+- **异常态专页**：新增 `prototype/states.html`，含五类异常/边界态（云端同步失败、空词库、组词全错、连续打卡中断、深色对比度不足），各态标注对应实现组件与处理要求。
+- **克制版状态联动**：`prototype.html` 新增微型 `bus` 事件器，`doneWords` 变更后仅局部刷新 `#today-panel` 的 `x/5` 计数与空态（`refreshToday`），不整页 `render`，保留翻卡/积分状态。
+- **门户导读**：`index.html` 逐卡加读者角色标注（决策方/开发者/设计方/产品·用研/QA），并新增 `states.html` 入口卡片。
+- 六份原型标题与各处版本标注统一同步至 v2.0.9。
+
 ### 修复（构建失败根因）
 - **EdgeOne 构建 ENOENT 根因修复**：`.codebuddy`（本地记忆目录）此前已被 `git add` 跟踪，仅加 `.gitignore` 忽略对已跟踪文件无效，导致构建沙箱仍按跟踪集 `stat('.codebuddy')` 失败。改用 `git rm --cached -r .codebuddy` 将其彻底移出 git 索引（本地目录保留），配合 `.gitignore` 的 `.codebuddy/` 规则，确保远端与沙箱不再包含该目录。
 

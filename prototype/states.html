@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>英语闯关台 LexiQuest · 异常与边界态 v2.0.9</title>
+<link rel="stylesheet" href="tokens.css" />
+<style>
+body{line-height:1.6}
+.hero{max-width:1080px;margin:0 auto;padding:44px 24px 8px;text-align:center}
+.hero h1{margin:0;font-size:28px}
+.hero p{color:var(--text-soft);max-width:640px;margin:12px auto 0;font-size:14.5px}
+.grid{max-width:1080px;margin:30px auto;padding:0 24px;display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+@media(max-width:760px){.grid{grid-template-columns:1fr;padding:0 16px}}
+.state{background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+.state .hd{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.state .hd .ic{font-size:22px}
+.state .hd h2{margin:0;font-size:16px}
+.state .hd .badge{margin-left:auto;font-size:11px;padding:3px 9px;border-radius:999px;background:var(--bg-sunken);color:var(--text-soft)}
+.state .body{padding:18px 20px}
+.state .trigger{font-size:12.5px;color:var(--text-faint);margin:0 0 14px;line-height:1.5}
+.state .trigger b{color:var(--text-soft)}
+.screen{background:var(--bg-sunken);border-radius:var(--radius-sm);padding:16px;border:1px dashed var(--border)}
+.screen .row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.screen .row:last-child{margin-bottom:0}
+.note{font-size:12px;color:var(--text-faint);margin:12px 0 0;line-height:1.5}
+/* 同步失败 */
+.sync-fail{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--danger-soft);color:var(--danger)}
+.dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+.btn{appearance:none;border:1px solid var(--primary);background:var(--primary);color:#fff;font-size:13px;font-weight:600;padding:8px 14px;border-radius:10px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--primary)}
+/* 空词库 */
+.empty{text-align:center;padding:26px 10px;color:var(--text-soft)}
+.empty .big{font-size:34px}
+.empty .cta{margin-top:12px}
+/* 组词全错 */
+.quiz-res{padding:12px;border-radius:10px;background:var(--danger-soft);color:var(--danger);font-size:13px;line-height:1.6}
+.quiz-res .retry{margin-top:10px}
+/* streak 归零 */
+.streak-zero{display:flex;align-items:center;gap:12px}
+.streak-zero .flame{font-size:28px;filter:grayscale(1);opacity:.5}
+.streak-zero .meta b{font-size:20px;color:var(--text-faint)}
+/* 对比度提示 */
+.a11y-tip{display:flex;gap:10px;align-items:flex-start;padding:12px;border-radius:10px;background:var(--warn-soft);color:var(--warn);font-size:13px;line-height:1.6}
+.a11y-tip .ic{font-size:18px;flex:none}
+.foot{text-align:center;color:var(--text-faint);font-size:12px;margin:40px 0 50px}
+.backlink{display:block;text-align:center;margin:18px auto 0}
+.backlink a{color:var(--primary);font-size:13px;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1>异常与边界态原型</h1>
+  <p>覆盖同步失败、空词库、组词全错、连续打卡中断、深色对比度不足五类真实场景，供实现阶段（<code>app/components/*</code>）补齐边界处理。与 <code>prototype.html</code> 共享 <code>tokens.css</code>。</p>
+</div>
+
+<div class="grid">
+
+  <!-- 1 同步失败 -->
+  <section class="state" data-component="SettingsDrawer.tsx">
+    <div class="hd"><span class="ic">☁️</span><h2>云端同步失败</h2><span class="badge">离线 / 401</span></div>
+    <div class="body">
+      <p class="trigger">触发：网络断开或同步码失效（<b>401</b>）。<code>SettingsDrawer</code> 的 <code>syncState</code> 进入 <code>offline</code>。</p>
+      <div class="screen">
+        <div class="row"><span class="sync-fail"><span class="dot"></span>同步失败 · 请检查网络或同步码</span></div>
+        <div class="row"><button class="btn">重试同步</button><button class="btn ghost">改用本地模式</button></div>
+      </div>
+      <p class="note">要求：失败时保留本机进度，不静默丢数据；重试有节流（避免雪崩）。</p>
+    </div>
+  </section>
+
+  <!-- 2 空词库 -->
+  <section class="state" data-component="TodayPanel.tsx">
+    <div class="hd"><span class="ic">📭</span><h2>空词库（新人群无词）</h2><span class="badge">初始态</span></div>
+    <div class="body">
+      <p class="trigger">触发：新建人群但未导入词库，<code>wordsByGroup(group)</code> 返回空数组。</p>
+      <div class="screen">
+        <div class="empty">
+          <div class="big">📚</div>
+          <div>该年龄段还没有单词，先去添加一些吧～</div>
+          <div class="cta"><button class="btn">+ 添加单词</button></div>
+        </div>
+      </div>
+      <p class="note">要求：今日面板与闯关看板均需判空，禁止渲染 <code>undefined</code> 单词卡。</p>
+    </div>
+  </section>
+
+  <!-- 3 组词全错 -->
+  <section class="state" data-component="FormationPractice.tsx">
+    <div class="hd"><span class="ic">❌</span><h2>组词练习全错</h2><span class="badge">重试上限</span></div>
+    <div class="body">
+      <p class="trigger">触发：用户选项与 <code>answers</code> 完全不符，达到最大重试次数。</p>
+      <div class="screen">
+        <div class="quiz-res">
+          <b>解析：</b>player（运动员）= play + -er；playing = play + -ing；playground = play + ground。happy 与 plant 不含 play。
+          <div class="retry"><button class="btn">再看一次（剩余 0 次）</button></div>
+        </div>
+      </div>
+      <p class="note">要求：展示正确拆分并给出「看答案」入口；重试计数清零逻辑需明确。</p>
+    </div>
+  </section>
+
+  <!-- 4 streak 归零 -->
+  <section class="state" data-component="TodayPanel.tsx">
+    <div class="hd"><span class="ic">🔥</span><h2>连续打卡中断</h2><span class="badge">streak=0</span></div>
+    <div class="body">
+      <p class="trigger">触发：超过 24 小时未学习，连续打卡（<code>streak</code>）归零并播放重置动画。</p>
+      <div class="screen">
+        <div class="streak-zero">
+          <span class="flame">🔥</span>
+          <div class="meta"><b>0</b><div>连续打卡已中断，今天继续就能重新开始 💪</div></div>
+        </div>
+      </div>
+      <p class="note">要求：归零动画遵循 <code>prefers-reduced-motion</code>；归零不扣已得积分。</p>
+    </div>
+  </section>
+
+  <!-- 5 深色对比度 -->
+  <section class="state" data-component="全局 · tokens.css">
+    <div class="hd"><span class="ic">👁️</span><h2>深色模式对比度不足</h2><span class="badge">弱视力 / 老年</span></div>
+    <div class="body">
+      <p class="trigger">触发：老年或弱视力用户在深色主题下，次要文字（<code>--text-faint</code>）对比度低于 WCAG AA。</p>
+      <div class="screen">
+        <div class="a11y-tip">
+          <span class="ic">⚠️</span>
+          <div>建议：深色模式下将辅助文字从 <code>--text-faint</code> 提升至 ≥ 4.5:1；词素语义色（prefix/root/suffix/base）在深背景需重新校验可读性。</div>
+        </div>
+      </div>
+      <p class="note">要求：所有语义色在明暗双主题均通过对比度检测，详见 <code>style-guide.html</code>。</p>
+    </div>
+  </section>
+
+</div>
+
+<div class="backlink"><a href="index.html">← 返回原型门户</a></div>
+<div class="foot">LexiQuest 异常态原型 · v2.0.9</div>
+</body>
+</html>

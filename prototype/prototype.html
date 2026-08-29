@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>英语闯关台 LexiQuest · 高保真原型 v2.0.5</title>
+<title>英语闯关台 LexiQuest · 高保真原型 v2.0.9</title>
 <!-- 设计令牌单一来源：与 app/globals.css 同步，禁止在各原型内联重复定义 -->
 <link rel="stylesheet" href="tokens.css" />
+<!-- 真实词库（来源 lib/words.ts，由 scripts/gen-proto-data.mjs 生成） -->
+<script src="data.js"></script>
 <style>
 * { box-sizing: border-box; }
 html, body {
@@ -353,67 +355,22 @@ button { font-family: inherit; cursor: pointer; }
 <div class="celebration-layer" aria-hidden="true"></div>
 
 <script>
-/* ====== 真实数据（节选自 lib/words.ts） ====== */
-const WORDS = [
-  { id:"ch-unhappy", group:"children", word:"unhappy", phonetic:"/ʌnˈhæpi/", pos:"adj. 形容词", meaning:"不高兴的，不开心的",
-    parts:[{text:"un-",type:"prefix",hint:"表示“不、相反”"},{text:"happy",type:"base",hint:"快乐"}],
-    example:{en:"The unhappy boy left the room.",zh:"那个不高兴的男孩离开了房间。"}, tags:["情绪"] },
-  { id:"ch-teacher", group:"children", word:"teacher", phonetic:"/ˈtiːtʃər/", pos:"n. 名词", meaning:"老师，教师",
-    parts:[{text:"teach",type:"base",hint:"教"},{text:"-er",type:"suffix",hint:"表示“做…的人”"}],
-    example:{en:"My teacher is very kind.",zh:"我的老师很和蔼。"}, tags:["人物"] },
-  { id:"ch-player", group:"children", word:"player", phonetic:"/ˈpleɪər/", pos:"n. 名词", meaning:"运动员；玩家",
-    parts:[{text:"play",type:"base",hint:"玩、比赛"},{text:"-er",type:"suffix",hint:"表示“做…的人”"}],
-    example:{en:"He is a football player.",zh:"他是一名足球运动员。"}, tags:["人物"] },
-  { id:"ch-raincoat", group:"children", word:"raincoat", phonetic:"/ˈreɪnkoʊt/", pos:"n. 名词", meaning:"雨衣",
-    parts:[{text:"rain",type:"base",hint:"雨"},{text:"coat",type:"base",hint:"外套"}],
-    example:{en:"Put on your raincoat, it is raining.",zh:"穿上雨衣，下雨了。"}, tags:["物品"] },
-  { id:"ch-sunlight", group:"children", word:"sunlight", phonetic:"/ˈsʌnlaɪt/", pos:"n. 名词", meaning:"阳光",
-    parts:[{text:"sun",type:"base",hint:"太阳"},{text:"light",type:"base",hint:"光"}],
-    example:{en:"Plants need sunlight to grow.",zh:"植物需要阳光才能生长。"}, tags:["自然"] },
-
-  { id:"tn-information", group:"teen", word:"information", phonetic:"/ˌɪnfərˈmeɪʃn/", pos:"n. 名词", meaning:"信息，资料",
-    parts:[{text:"in-",type:"prefix",hint:"进入（into）"},{text:"form",type:"root",hint:"形成、构成"},{text:"-ation",type:"suffix",hint:"名词后缀"}],
-    example:{en:"This book has useful information.",zh:"这本书里有有用的信息。"}, tags:["考试"] },
-  { id:"tn-unbelievable", group:"teen", word:"unbelievable", phonetic:"/ˌʌnbɪˈliːvəbl/", pos:"adj. 形容词", meaning:"难以置信的",
-    parts:[{text:"un-",type:"prefix",hint:"不"},{text:"believe",type:"root",hint:"相信"},{text:"-able",type:"suffix",hint:"可…的"}],
-    example:{en:"The news is unbelievable!",zh:"这消息令人难以置信！"}, tags:["考试"] },
-  { id:"tn-international", group:"teen", word:"international", phonetic:"/ˌɪntərˈnæʃnəl/", pos:"adj. 形容词", meaning:"国际的",
-    parts:[{text:"inter-",type:"prefix",hint:"之间（between）"},{text:"nation",type:"root",hint:"国家"},{text:"-al",type:"suffix",hint:"形容词后缀"}],
-    example:{en:"We joined an international competition.",zh:"我们参加了一场国际比赛。"}, tags:["考试"] },
-  { id:"tn-transportation", group:"teen", word:"transportation", phonetic:"/ˌtrænspɔːrˈteɪʃn/", pos:"n. 名词", meaning:"交通运输",
-    parts:[{text:"trans-",type:"prefix",hint:"跨越（across）"},{text:"port",type:"root",hint:"运送"},{text:"-ation",type:"suffix",hint:"名词后缀"}],
-    example:{en:"Public transportation is convenient.",zh:"公共交通很方便。"}, tags:["考试"] },
-
-  { id:"ad-transform", group:"adult", word:"transform", phonetic:"/trænsˈfɔːrm/", pos:"v. 动词", meaning:"使改变，转化",
-    parts:[{text:"trans-",type:"prefix",hint:"跨越（across）"},{text:"form",type:"root",hint:"形、形式"}],
-    example:{en:"The plan will transform our city.",zh:"这个计划将改变我们的城市。"}, tags:["职场"] },
-  { id:"ad-perspective", group:"adult", word:"perspective", phonetic:"/pərˈspektɪv/", pos:"n. 名词", meaning:"视角，观点",
-    parts:[{text:"per-",type:"prefix",hint:"穿过（through）"},{text:"spect",type:"root",hint:"看（look）"},{text:"-ive",type:"suffix",hint:"名词/形容词后缀"}],
-    example:{en:"Try to see it from a new perspective.",zh:"试着从一个新角度看它。"}, tags:["职场"] },
-  { id:"ad-sustainable", group:"adult", word:"sustainable", phonetic:"/səˈsteɪnəbl/", pos:"adj. 形容词", meaning:"可持续的",
-    parts:[{text:"sustain",type:"root",hint:"维持"},{text:"-able",type:"suffix",hint:"可…的"}],
-    example:{en:"We need sustainable development.",zh:"我们需要可持续发展。"}, tags:["职场"] },
-  { id:"ad-collaborate", group:"adult", word:"collaborate", phonetic:"/kəˈlæbəreɪt/", pos:"v. 动词", meaning:"合作，协作",
-    parts:[{text:"col-",type:"prefix",hint:"一起（together）"},{text:"labor",type:"root",hint:"劳动（work）"},{text:"-ate",type:"suffix",hint:"动词后缀"}],
-    example:{en:"Teams collaborate to ship the product.",zh:"各团队协作把产品交付上线。"}, tags:["职场"] },
-];
-
-const FORMATION = [
-  { id:"f-ch-play", group:"children", root:"play", rootHint:"play = 玩", question:"选出由 play（玩）构成的词：",
-    options:["player","playing","playground","happy","plant"], answers:[0,1,2],
-    explanation:"player（运动员）= play + -er；playing（正在玩）= play + -ing；playground（操场）= play + ground。happy 和 plant 不含 play。" },
-  { id:"f-tn-spect", group:"teen", root:"spect", rootHint:"spect = 看（look）", question:"选出含有词根 spect（看）的词：",
-    options:["inspect","spectator","prospect","aspect","respect"], answers:[0,1,2,3],
-    explanation:"inspect（检查=往里看）、spectator（观众）、prospect（前景=往前看）、aspect（方面=看的角度）均来自 spect。respect 词源为 spic，不计入。" },
-  { id:"f-ad-port", group:"adult", root:"port", rootHint:"port = 运送 / 搬运（carry）", question:"选出含词根 port（运送）的词：",
-    options:["export","import","transport","part","report"], answers:[0,1,2,4],
-    explanation:"export（出口=运出）、import（进口=运入）、transport（运输）、report（报告=传回）都含 port。part（部分）无关。" },
-];
+/* ====== 真实数据：直接来自 lib/words.ts（由 scripts/gen-proto-data.mjs 生成 prototype/data.js） ====== */
+const WORDS = (window.PROTO_DATA && window.PROTO_DATA.WORDS) || [];
+const FORMATION = (window.PROTO_DATA && window.PROTO_DATA.FORMATION) || [];
 
 const GROUP_META = {
   children: { name:"儿童启蒙", range:"6-12 岁", color:"#f59e0b", emoji:"🧒", desc:"趣味单词 + 简单词素拆分，图形化记忆更轻松" },
   teen:     { name:"青少年学生", range:"13-22 岁", color:"#4f46e5", emoji:"🎓", desc:"中考 / 高考 / 四六级高频词，词根词缀拆解助记" },
   adult:    { name:"成人进阶", range:"22 岁以上", color:"#0ea5e9", emoji:"💼", desc:"职场与生活进阶词汇，拆解构词逻辑高效记忆" },
+};
+
+/* 微型事件总线：仅用于「勾选单词 → 今日进度局部刷新」这类跨组件联动，
+   不引入完整状态库（克制版，避免把原型写成框架）。 */
+const bus = {
+  subs: {},
+  on(k, cb){ (this.subs[k] ||= []).push(cb); },
+  emit(k, p){ (this.subs[k] || []).forEach(cb => cb(p)); },
 };
 
 function readableTextOn(hex) {
@@ -751,6 +708,10 @@ function updatePoints(){
 }
 
 function bind(){
+  // 订阅今日进度联动（每次 render 重建 DOM，先清空旧订阅避免重复绑定）
+  bus.subs.today = [];
+  bus.on("today", refreshToday);
+
   // 顶部 Logo 点击 / 键盘 → 全屏庆祝彩蛋（纯装饰，aria-hidden）
   document.querySelectorAll('.hd .logo').forEach(l=>{
     const go = ()=> fireCelebrate(...centerOf(l), 16, CELE_POOL);
@@ -778,6 +739,23 @@ function bind(){
   const tb2 = document.getElementById("themeBtn");
   if (tb2) tb2.onclick = ()=>{ state.theme = state.theme==='dark'?'light':'dark'; document.documentElement.classList.toggle("dark", state.theme==='dark'); tb2.innerHTML = state.theme==='dark'?I.sun:I.moon; };
   // 已绑定的局部交互委托到 bindLocal
+}
+
+/* 今日进度局部刷新：订阅 bus "today" 事件，仅更新 #today-panel 计数与空态，不整页 render */
+function refreshToday(){
+  const panel = document.getElementById("today-panel");
+  if (!panel) return;
+  const bank = WORDS.filter(w=>w.group===state.group);
+  const todayWords = bank.slice(0, 5);
+  const todayDone = todayWords.filter(w=>state.doneWords.has(w.id)).length;
+  const dateEl = panel.querySelector(".date");
+  if (dateEl) dateEl.textContent = `${todayStr()} · ${todayDone}/${todayWords.length} 已完成`;
+  const allDone = todayWords.length>0 && todayDone===todayWords.length;
+  const emptyEl = panel.querySelector(".empty");
+  if (allDone && !emptyEl) {
+    const rows = panel.querySelector(".row");
+    if (rows) panel.innerHTML = `<div class="head">${I.book} 今日要处理 <span class="date">${todayStr()} · ${todayDone}/${todayWords.length} 已完成</span></div><div class="empty">🎉 今天已经全部完成，明天再来吧！</div>`;
+  }
 }
 
 /* 局部交互（翻卡/朗读/勾选/组词/抽屉内部），每次局部重渲染后重绑 */
@@ -808,6 +786,7 @@ function bindLocal(){
         if (levelForPoints(state.points) > beforeLv) fireCelebrate(window.innerWidth/2, 110, 24, ["🎉","🏆","⭐","🌟","✨","🚀","💫"]);
       }
       updatePoints();
+      bus.emit("today"); // 通知今日进度局部刷新（不整页 render）
     };
   });
   // 组词练习

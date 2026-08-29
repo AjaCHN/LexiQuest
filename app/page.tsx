@@ -129,6 +129,8 @@ export default function Page() {
       setSyncState("synced");
     } else {
       setSyncState(r.mode === "offline" ? "offline" : "local");
+      // 「云端同步失败」异常态：本地进度已保存，提示用户数据不丢（对齐 prototype/states.html）。
+      showToast(r.mode === "offline" ? "离线啦～进度已存本地，联网后自动同步" : "同步失败，进度已保留在本地");
     }
   }
 
@@ -208,6 +210,11 @@ export default function Page() {
       fireLevelUp();
     }
     syncPush(res.progress);
+  }
+
+  function handleFormationResult(_id: string, correct: boolean) {
+    // 「组词全错」异常态：给出鼓励性反馈，避免用户卡在挫败感（对齐 prototype/states.html）。
+    if (!correct) showToast("没关系～看词根提示再试一次，记得更牢！");
   }
 
   function handleCompleteFormation(id: string) {
@@ -459,6 +466,7 @@ export default function Page() {
             challenges={challenges}
             formationDone={progress.formationDone}
             onComplete={handleCompleteFormation}
+            onResult={handleFormationResult}
           />
         </div>
       )}

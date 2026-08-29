@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>英语闯关台 LexiQuest · 原型门户 v2.0.5</title>
+<title>英语闯关台 LexiQuest · 原型门户 v2.0.9</title>
 <link rel="stylesheet" href="tokens.css" />
 <style>
 body{line-height:1.6}
@@ -45,25 +45,31 @@ code{background:var(--bg-sunken);padding:2px 6px;border-radius:6px;font-size:12p
     <div class="ic">🎯</div>
     <h2>高保真主原型</h2>
     <p class="desc">可交互的完整产品原型：人群选择、每日单词翻转卡、组词练习、闯关积分、设置抽屉与深色模式，附真实词库数据。</p>
-    <div class="tags"><span class="tag">可交互</span><span class="tag">动效</span><span class="tag">深色模式</span></div>
+    <div class="tags"><span class="tag">决策方·可点 demo</span><span class="tag">动效</span><span class="tag">深色模式</span></div>
   </a>
   <a class="card" href="wireframes.html">
     <div class="ic">🧩</div>
     <h2>组件库规范</h2>
     <p class="desc">基础组件、复合组件、业务组件的视觉与交互约定，含使用规则表，供原型与实现对齐。</p>
-    <div class="tags"><span class="tag">基础</span><span class="tag">复合</span><span class="tag">业务</span></div>
+    <div class="tags"><span class="tag">开发者·对齐 app/components</span><span class="tag">基础</span><span class="tag">业务</span></div>
   </a>
   <a class="card" href="style-guide.html">
     <div class="ic">🎨</div>
     <h2>视觉设计系统</h2>
     <p class="desc">配色、词素语义色、字体排印、间距圆角、阴影层级与暗色主题预览，定义全站视觉语言。</p>
-    <div class="tags"><span class="tag">配色</span><span class="tag">字体</span><span class="tag">暗色</span></div>
+    <div class="tags"><span class="tag">设计方</span><span class="tag">配色</span><span class="tag">暗色</span></div>
   </a>
   <a class="card" href="flows.html">
     <div class="ic">🔀</div>
     <h2>关键用户流程</h2>
     <p class="desc">首次上手、每日单词学习、组词练习、闯关积分、云端同步五条主链路，含分支与异常态。</p>
-    <div class="tags"><span class="tag">5 流程</span><span class="tag">分支</span><span class="tag">异常</span></div>
+    <div class="tags"><span class="tag">产品·用研</span><span class="tag">5 流程</span><span class="tag">分支</span></div>
+  </a>
+  <a class="card" href="states.html">
+    <div class="ic">⚠️</div>
+    <h2>异常与边界态</h2>
+    <p class="desc">同步失败、空词库、组词全错、连续打卡中断、深色对比度不足五类真实场景，供实现补齐边界处理。</p>
+    <div class="tags"><span class="tag">QA·实现边界</span><span class="tag">5 态</span></div>
   </a>
 </div>
 
@@ -84,6 +90,6 @@ code{background:var(--bg-sunken);padding:2px 6px;border-radius:6px;font-size:12p
   <p style="color:var(--text-faint);font-size:12.5px;margin-top:12px">说明：原型数据为 <code>lib/words.ts</code> 的节选，字段与真实类型 <code>lib/types.ts</code> 对齐；落地实现时直接复用组件文件，无需重写结构。</p>
 </div>
 
-<div class="foot">LexiQuest 原型门户 · v2.0.5 · 与 prototype / wireframes / style-guide / flows 协同</div>
+<div class="foot">LexiQuest 原型门户 · v2.0.9 · 与 prototype / wireframes / style-guide / flows / states 协同</div>
 </body>
 </html>
