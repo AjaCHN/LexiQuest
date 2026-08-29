@@ -4,6 +4,9 @@
 
 ## [Unreleased]
 
+### 修复（构建失败根因）
+- **EdgeOne 构建 ENOENT 根因修复**：`.codebuddy`（本地记忆目录）此前已被 `git add` 跟踪，仅加 `.gitignore` 忽略对已跟踪文件无效，导致构建沙箱仍按跟踪集 `stat('.codebuddy')` 失败。改用 `git rm --cached -r .codebuddy` 将其彻底移出 git 索引（本地目录保留），配合 `.gitignore` 的 `.codebuddy/` 规则，确保远端与沙箱不再包含该目录。
+
 ### 清理（冗余移除）
 - 删除 `review_results.json`（107KB 静态分析脚本中间产物，无代码引用，已从 git 跟踪移除）。
 - 删除 `REVIEW-2026-08-28.md`：与 `REVIEW.md` §七 修复闭环结论重复的带日期审查副本。
