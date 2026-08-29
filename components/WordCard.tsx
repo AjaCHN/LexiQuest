@@ -29,9 +29,22 @@ export default function WordCard({ word }: { word: WordEntry }) {
           <button
             className="btn sm ghost flipbtn"
             tabIndex={open ? -1 : 0}
-            onClick={() => {
+            onClick={(e) => {
               setOpen(true);
               speak();
+              const r = e.currentTarget.getBoundingClientRect();
+              if (typeof window !== "undefined") {
+                window.dispatchEvent(
+                  new CustomEvent("lexiquest:celebrate", {
+                    detail: {
+                      x: r.left + r.width / 2,
+                      y: r.top + r.height / 2,
+                      count: 8,
+                      emojis: ["✨", "💡", "🌟"],
+                    },
+                  })
+                );
+              }
             }}
           >
             <IconPlay size={15} /> 看拆分

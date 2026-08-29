@@ -32,6 +32,7 @@ import WordCard from "../components/WordCard";
 import FormationPractice from "../components/FormationPractice";
 import ChallengePanel from "../components/ChallengePanel";
 import SettingsDrawer from "../components/SettingsDrawer";
+import Celebration from "../components/Celebration";
 import {
   IconLogo,
   IconBook,
@@ -50,6 +51,22 @@ type Tab = "words" | "formation" | "challenge";
 function applyTheme(t: "light" | "dark") {
   if (typeof document === "undefined") return;
   document.documentElement.classList.toggle("dark", t === "dark");
+}
+
+// 探索彩蛋：点击 Logo 触发全屏 emoji 庆祝（纯装饰，Celebration 层已 aria-hidden）
+function fireLogoBurst(el: EventTarget & Element) {
+  if (typeof window === "undefined") return;
+  const r = el.getBoundingClientRect();
+  window.dispatchEvent(
+    new CustomEvent("lexiquest:celebrate", {
+      detail: {
+        x: r.left + r.width / 2,
+        y: r.top + r.height / 2,
+        count: 16,
+        emojis: ["✨", "⭐", "🌟", "🎉", "🚀", "🧠"],
+      },
+    })
+  );
 }
 
 export default function Page() {
@@ -157,7 +174,7 @@ export default function Page() {
     saveProgress(res.progress);
     setProgress(res.progress);
     setPlan(res.plan);
-    if (gained) showToast(gained > 0 ? `已完成 +${gained} 分` : `已取消 -${-gained} 分`);
+    if (gained) showToast(gained > 0 ? `学会一个 +${gained} 分 ✨` : `已取消 -${-gained} 分`);
     syncPush(res.progress);
   }
 
@@ -166,7 +183,19 @@ export default function Page() {
     const { progress: np, gained } = completeFormation(progress, id);
     saveProgress(np);
     setProgress(np);
-    showToast(`组词完成 +${gained} 分`);
+    showToast(`组词大成！+${gained} 分 🎉`);
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("lexiquest:celebrate", {
+          detail: {
+            x: window.innerWidth / 2,
+            y: window.innerHeight * 0.42,
+            count: 18,
+            emojis: ["🎉", "🏆", "✨", "💡", "🧠"],
+          },
+        })
+      );
+    }
     syncPush(np);
   }
 
@@ -249,7 +278,20 @@ export default function Page() {
   return (
     <main id="lexiquest-app" className="app">
       <div id="app-header" className="hd">
-        <div className="logo">
+        <div
+          className="logo"
+          role="button"
+          tabIndex={0}
+          title="点我有惊喜"
+          aria-label="点击 Logo 触发庆祝彩蛋"
+          onClick={(e) => fireLogoBurst(e.currentTarget)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              fireLogoBurst(e.currentTarget);
+            }
+          }}
+        >
           <IconLogo />
         </div>
         <div>
@@ -358,7 +400,7 @@ export default function Page() {
               ))}
             </div>
           ) : (
-            <div className="empty">今天没有安排，去“闯关积分”看看你的进度吧！</div>
+            <div className="empty">今日单词已全部学完啦！去「闯关积分」看看你离下一关还有多远 🏆</div>
           )}
         </div>
       )}
@@ -442,6 +484,8 @@ export default function Page() {
         onImport={handleImport}
         onClear={handleClear}
       />
+
+      <Celebration />
 
       {toast && (
         <div className="toast" role="status" aria-live="polite">

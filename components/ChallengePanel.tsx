@@ -103,7 +103,7 @@ export default function ChallengePanel({ progress }: { progress: UserProgress })
             <div className="badge">连</div>
             <div className="info">
               <div className="t">连续每天学习</div>
-              <div className="d">连续 {progress.streak} 天，别断签！</div>
+              <div className="d">连续 {progress.streak} 天，稳住别断签 🔥</div>
             </div>
           </div>
         </div>

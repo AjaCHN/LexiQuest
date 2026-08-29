@@ -816,6 +816,177 @@ button {
   font-size: 14px;
 }
 
+/* ---------- Delightful micro-interactions (惊喜喜) ---------- */
+/* 所有动效均被文末 @media (prefers-reduced-motion: reduce) 归零，尊重前庭敏感用户。 */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.28),
+    transparent 70%
+  );
+  transform: translateX(-130%);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+.btn:hover {
+  transform: translateY(-1px);
+}
+.btn:hover::after {
+  transform: translateX(130%);
+}
+.btn.primary:hover {
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--primary) 38%, transparent);
+}
+
+/* 答对选项：弹一下确认 */
+.opt.right {
+  animation: pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.opt.wrong {
+  animation: shake 0.4s ease;
+}
+@keyframes pop {
+  0% { transform: scale(1); }
+  45% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
+/* 勾选完成：放大弹入 */
+.check.on {
+  animation: checkpop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes checkpop {
+  0% { transform: scale(0.5); }
+  60% { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+/* 连续打卡火苗：hover 摆动 */
+.chip.flame:hover svg {
+  transform-origin: 50% 90%;
+  animation: wiggle 0.6s ease;
+}
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-10deg); }
+  50% { transform: rotate(10deg); }
+  75% { transform: rotate(-5deg); }
+}
+
+/* 翻转卡揭示：轻微 pop，强调"翻开了新知识" */
+.flip.open {
+  animation: cardpop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes cardpop {
+  0% { transform: scale(0.97); }
+  60% { transform: scale(1.012); }
+  100% { transform: scale(1); }
+}
+
+/* 进度条：流动微光，暗示"正在成长" */
+.lvl-bar > i {
+  position: relative;
+  overflow: hidden;
+}
+.lvl-bar > i::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.45),
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* 已达成关卡徽章：达成时 pulse */
+.lvl.done .badge {
+  animation: badgepulse 0.5s ease;
+}
+@keyframes badgepulse {
+  0% { transform: scale(0.8); }
+  55% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* Toast 弹入 */
+.toast {
+  animation: toastpop 0.25s ease;
+}
+@keyframes toastpop {
+  0% { opacity: 0; transform: translate(-50%, 8px); }
+  100% { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* Logo：hover 轻跳（轻微探索彩蛋入口） */
+.hd .logo {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.hd .logo:hover {
+  animation: bob 0.6s ease;
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-4px); }
+  60% { transform: translateY(0); }
+  80% { transform: translateY(-2px); }
+}
+
+/* ---------- Celebration layer (惊喜喜) ---------- */
+.celebration-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 80;
+  overflow: hidden;
+}
+.celebrate-emoji {
+  position: absolute;
+  font-size: 22px;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  animation: floatup var(--dur, 1s) ease-out forwards;
+  will-change: transform, opacity;
+}
+@keyframes floatup {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.4) rotate(0deg);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.15) rotate(8deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--dx, 0px)), -170px) scale(0.9)
+      rotate(-10deg);
+  }
+}
+
 /* ---------- Reduced motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   *,

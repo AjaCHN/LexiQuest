@@ -35,7 +35,7 @@ export default function FormationPractice({
   };
 
   if (!challenges.length)
-    return <div className="empty">该年龄段暂无组词练习，敬请期待。</div>;
+    return <div className="empty">这个年龄段还没出题，换个挑战或明天再来～</div>;
 
   return (
     <>
@@ -103,7 +103,8 @@ export default function FormationPractice({
             ) : (
               <div className="exp">
                 <IconSparkle size={14} />{" "}
-                <b>{correct ? "答对了！" : "再看看："}</b> {c.explanation}
+                <b>{correct ? "答对了，就是这个味 🎉" : "差一点点！再看看词根提示～"}</b>{" "}
+                {c.explanation}
               </div>
             )}
           </div>
